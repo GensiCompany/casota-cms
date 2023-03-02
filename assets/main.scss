@@ -83,3 +83,11 @@ a {
 .ant-table-column-title {
     @apply uppercase #{!important}
 }
+
+.ant-btn-primary{
+    @apply bg-prim-100 text-white border-transparent #{!important};
+}
+
+.ant-switch-checked {
+    @apply bg-prim-100 #{!important};
+}

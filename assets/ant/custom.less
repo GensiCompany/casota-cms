@@ -12,6 +12,10 @@
     }
 }
 
+.ant-modal-title {
+    @apply text-prim-100;
+}
+
 // Table
 .ant-table-wrapper {
     .ant-table-selection {
@@ -175,19 +179,27 @@
 }
 
 // Dialog
-.ant-modal {
-    max-width: 95vw;
-    &-header {
-        @apply px-4 py-2;
-    }
-    &-title {
-        @apply font-semibold text-xl !important;
-    }
-    &-close {
-        width: 28px;
-        height: 28px;
-        top: -9px;
-        right: 20px;
+.ant-modal-wrap {
+    .ant-modal {
+        max-width: 95vw;
+        &-title {
+            @apply font-semibold text-3xl;
+        }
+        &-header {
+            @apply border-b-0 pb-0 px-4 py-2;
+        }
+        &-footer {
+            @apply border-t-0 pt-0 p-6;
+        }
+        &-close-icon {
+            &:hover {
+                @apply scale-105 duration-100;
+            }
+            svg {
+                @apply fill-danger-80;
+            }
+            @apply bg-danger-10 p-2 rounded-full overflow-hidden relative top-4 right-2;
+        }
     }
 }
 

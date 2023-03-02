@@ -6,15 +6,15 @@ export default {
     dev: !isProduction,
 
     // When SPA
-    loading: '@/components/shared/Loading.vue',
+    loading: false,
 
     // When SSR
     ssr: false,
 
-    // loadingIndicator: {
-    //     name: 'wandering-cubes',
-    //     color: '#22c55e',
-    // },
+    loadingIndicator: {
+        name: 'wandering-cubes',
+        color: '#2F2519',
+    },
 
     head: {
         title: 'CASOTA CMS',

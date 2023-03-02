@@ -2,7 +2,7 @@
     <a-modal
         v-model="visible"
         destroy-on-close
-        :title="_isEmpty(feedback) ? 'Tạo Banner' : 'Chỉnh sửa Banner'"
+        :title="_isEmpty(category) ? 'Tạo danh mục' : 'Chỉnh sửa danh mục'"
     >
         <a-form-model
             ref="form"
@@ -18,7 +18,7 @@
                             :src="form.thumbnail"
                             onerror="this.src='/images/default-avatar.png'"
                             alt=""
-                            class="w-full h-[200px] rounded-md object-cover"
+                            class="w-[100px] h-[100px] rounded-md object-cover"
                         >
                         <div v-else class="w-[100px] h-[100px] rounded-md border-dashed border border-gray-400 flex justify-center items-center">
                             <span><i class="fas fa-plus" /></span>
@@ -33,17 +33,16 @@
                         <div class="flex gap-x-2">
                             <div class="flex items-center w-fit px-2 py-1 rounded-lg border cursor-pointer border-[#0c4ea4] hover:bg-[#0c4ea4] hover:text-[#fff] transition duration-150 ease-out hover:ease-in border-[#d3d3d3]" @click="openSelectFile">
                                 <p class="mb-0 px-3 text-sm text-black">
-                                    {{ _isEmpty(feedback) ? 'Upload' : 'Thay đổi' }}
+                                    {{ _isEmpty(category) ? 'Upload' : 'Thay đổi' }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </a-form-model-item>
-                <a-form-model-item label="Nội dung phản hồi" prop="content" class="col-span-7">
-                    <a-textarea
-                        v-model="form.content"
-                        placeholder="Nhập mô tả"
-                        :auto-size="{ minRows: 5, maxRows: 8 }"
+                <a-form-model-item label="Tên danh mục" prop="title" class="col-span-7">
+                    <a-input
+                        v-model="form.title"
+                        placeholder="Nhập Tên danh mục"
                     />
                 </a-form-model-item>
             </div>
@@ -54,11 +53,11 @@
             </a-button>
             <a-button
                 :loading="loading"
-                class="w-28"
+                class="px-2"
                 type="primary"
                 @click="submit"
             >
-                {{ _isEmpty(feedback) ? "Tạo feedback" : "Gửi" }}
+                {{ _isEmpty(category) ? "Tạo danh mục" : "Thay đổi" }}
             </a-button>
         </div>
     </a-modal>
@@ -83,18 +82,20 @@
                 form: {
                     content: '',
                     thumbnail: '',
+                    _id: '',
                 },
                 fileName: null,
-                feedback: null,
+                category: null,
             };
         },
         methods: {
             _isEmpty,
-            open(feedback) {
-                this.feedback = feedback;
+            open(category) {
+                this.category = category;
                 this.form = {
-                    description: feedback ? feedback.description : '',
-                    thumbnail: feedback ? feedback.thumbnail : '',
+                    _id: category ? category._id : null,
+                    title: category ? category.title : '',
+                    thumbnail: category ? category.thumbnail : '',
                 };
                 this.visible = true;
             },
@@ -120,7 +121,7 @@
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                     .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch((err) => console.log(err))
+                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
                     .finally(() => false);
             },
 
@@ -129,11 +130,18 @@
                     if (valid) {
                         try {
                             this.loading = true;
-                            await this.handlerThumbnail();
-                            await this.$api.feedbacks.create({ ...this.form, status: 'active' });
-                            this.$message.success('Thêm Phản hồi thành công');
+                            if (this.fileName) {
+                                this.handlerThumbnail();
+                            }
+                            if (!this.form._id) {
+                                await this.$api.categories.create(this.form);
+                                this.$message.success('Thêm Danh mục thành công');
+                            } else {
+                                await this.$api.categories.update(this.form._id, this.form);
+                                this.$message.success('Sửa Danh mục thành công');
+                            }
                             this.close();
-                            await this.$store.dispatch('feedbacks/fetchAll', { ...this.$route.query, createdBy: 'admin' });
+                            await this.$store.dispatch('categories/fetchAll', this.$route.query);
                         } catch (error) {
                             this.$handleError(error);
                         } finally {

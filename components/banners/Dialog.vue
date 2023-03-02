@@ -128,11 +128,11 @@
                 const formData = new FormData();
                 const imageSelected = document.querySelector('#thumbnailImage').files[0];
                 formData.append('image', imageSelected);
-                await this.$axios.post('https://minh-long.herokuapp.com/api/uploads', formData, {
+                await this.$axios.post('https://casota.herokuapp.com/api/uploads', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                     .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch((err) => console.log(err))
+                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
                     .finally(() => false);
             },
 
@@ -144,14 +144,13 @@
                             if (this.fileName) {
                                 await this.handlerThumbnail();
                             }
-                            if (!this.form) {
+                            if (!this.form._id) {
                                 await this.$api.banners.create({ ...this.form, status: 'active' });
                                 this.$message.success('Thêm Banner thành công');
                             } else {
                                 await this.$api.banners.update(this.form._id, _omit(this.form, ['_id']));
                                 this.$message.success('Sửa Banner thành công');
                             }
-                            this.$message.success('Thêm banner thành công');
                             this.close();
                             await this.$store.dispatch('banners/fetchAll', this.$route.query);
                         } catch (error) {

@@ -1,5 +1,5 @@
 <template>
-    <div :class="`w-full 'bg-white' : 'bg-[#18191a]' px-3 xl:px-0 h-[calc(100vh-80px)] overflow-auto pb-4`">
+    <div :class="`w-full 'bg-white' : 'bg-[#18191a]' px-3 xl:px-0 overflow-auto pb-4`">
         <a-form-model
             ref="form"
             :model="form"
@@ -13,7 +13,6 @@
                     <a-form-model-item
                         prop="title"
                         label="Tiêu đề bài viết"
-                        class="!mb-5"
                     >
                         <a-input
                             v-model="form.title"
@@ -21,7 +20,12 @@
                             :disabled="isEdit"
                         />
                     </a-form-model-item>
-                    <a-form-model-item has-feedback label="Mô tả ngắn" prop="shortDescription">
+                    <a-form-model-item
+                        has-feedback
+                        class="!mt-5"
+                        label="Mô tả ngắn"
+                        prop="shortDescription"
+                    >
                         <a-textarea
                             v-model="form.shortDescription"
                             placeholder="Mô tả ngắn cho bài viết"
@@ -71,9 +75,9 @@
                                 v-model="form.newCategoryId"
                                 placeholder="Danh mục"
                                 class="w-full"
-                                :options="categories.map(e => ({ label: e.title, value: e._id}))"
                                 @change="selectCategory"
                             />
+                            <!-- :options="categories.map(e => ({ label: e.title, value: e._id})) || []" -->
                         </div>
                     </div>
                 </div>
@@ -142,11 +146,11 @@
                 const formData = new FormData();
                 const imageSelected = document.querySelector('#thumbnailImage').files[0];
                 formData.append('image', imageSelected);
-                await this.$axios.post('https://minh-long.herokuapp.com/api/uploads', formData, {
+                await this.$axios.post('https://casota.herokuapp.com/api/uploads', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                     .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch((err) => console.log(err))
+                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
                     .finally(() => false);
             },
             selectCategory(category) {

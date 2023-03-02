@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-table
-            :data-source="banners"
+            :data-source="categories"
             :pagination="false"
             :scroll="{ x: 1200 }"
             :row-key="(row) => row._id"
@@ -12,97 +12,35 @@
                 title="STT"
                 align="center"
                 :width="60"
-                :custom-render="
-                    (text, record, index) =>index+1
-                "
+                :custom-render="(text, record, index) => index + 1"
             />
             <a-table-column
                 key="thumbnail"
-                title="Ảnh"
+                title="Thumbnail danh mục"
                 :width="150"
-                align="center"
                 data-index="thumbnail"
             >
                 <template #default="thumbnail">
-                    <img :src="thumbnail" alt="/" class="rounded-md h-16 w-full object-cover">
+                    <img v-if="thumbnail !== ''" :src="thumbnail" alt="" class="rounded-md w-full h-20 object-cover">
+                    <p v-else>Không có dữ liệu</p>
                 </template>
             </a-table-column>
             <a-table-column
                 key="title"
-                title="Tiêu đề"
-                :width="150"
-                align="center"
+                title="Tên danh mục"
+                :width="300"
                 data-index="title"
-            >
-                <template #default="title">
-                    <p v-if="title">
-                        {{ title }}
-                    </p>
-                    <p v-else>
-                        {{ 'Không có Tiêu đề' }}
-                    </p>
-                </template>
-            </a-table-column>
-            <a-table-column
-                key="description"
-                title="Mô tả"
-                :width="200"
                 align="center"
-                data-index="description"
-            >
-                <template #default="description">
-                    <p v-if="description">
-                        {{ description }}
-                    </p>
-                    <p v-else>
-                        {{ 'Không có mô tả' }}
-                    </p>
-                </template>
-            </a-table-column>
-            <a-table-column
-                key="link"
-                title="Liên kết"
-                :width="200"
-                align="center"
-                data-index="link"
-            >
-                <template #default="link">
-                    <a
-                        v-if="link"
-                        :href="link"
-                        target="_blank"
-                        class="truncate block mx-auto !text-[#0c4ea4] w-full"
-                    >
-                        {{ link }}...
-                    </a>
-                    <p v-else>
-                        {{ 'Không có Liên kết' }}
-                    </p>
-                </template>
-            </a-table-column>
-            <a-table-column
-                key="status"
-                title="Hiển thị"
-                :width="120"
-                align="center"
-            >
-                <template #default="banner">
-                    <a-switch
-                        :default-checked="banner.status === 'active' ? true : false"
-                        @click="updateBanner(banner)"
-                        @change="onChange"
-                    />
-                </template>
-            </a-table-column>
+            />
             <a-table-column
                 key="createdAt"
                 data-index="createdAt"
                 title="Ngày tạo"
                 align="center"
-                :width="120"
+                :width="150"
             >
                 <template #default="createdAt">
-                    {{ createdAt | dateFormat('dd/MM/yyyy') }}
+                    {{ createdAt | dateFormat('HH:mm dd/MM/yyyy') }}
                 </template>
             </a-table-column>
             <a-table-column
@@ -112,14 +50,13 @@
                 :width="100"
                 fixed="right"
             >
-                <template #default="banner">
+                <template #default="category">
                     <a-button
                         type="primary"
-                        class="!bg-prim-100 !border-transparent"
                         shape="circle"
                         @click="() => {
-                            bannerSelected = banner,
-                            $refs.bannerDialog.open(banner)
+                            categorySelected = category,
+                            $refs.categoryDialog.open(category)
                         }"
                     >
                         <svg
@@ -137,9 +74,8 @@
                     <a-button
                         type="primary"
                         shape="circle"
-                        class="!bg-prim-100 !border-transparent"
                         @click="() => {
-                            bannerSelected = banner,
+                            categorySelected = category,
                             $refs.confirmDelete.open()}"
                     >
                         <svg
@@ -167,28 +103,29 @@
                 </template>
             </a-table-column>
         </a-table>
+
         <ConfirmDialog
             ref="confirmDelete"
-            title="Xóa banner"
-            content="Bạn chắc chắn xóa banner này ?"
+            title="Xóa danh mục"
+            content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
         />
-        <BannerDialog ref="bannerDialog" :banner="bannerSelected" />
+        <CategoryDialog ref="categoryDialog" :category="categorySelected" />
     </div>
 </template>
 
 <script>
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
-    import BannerDialog from '@/components/banners/Dialog.vue';
+    import CategoryDialog from '@/components/categories/Dialog.vue';
 
     export default {
         components: {
             ConfirmDialog,
-            BannerDialog,
+            CategoryDialog,
         },
 
         props: {
-            banners: {
+            categories: {
                 type: Array,
                 default: () => [],
             },
@@ -198,36 +135,23 @@
             },
         },
 
-        async asyncData({ store, query }) {
-            await store.dispatch('banners/fetchAll', query);
-        },
+        // async asyncData({ store, query }) {
+        //     await store.dispatch('posts/categories/fetchAll', query);
+        // },
 
         data() {
             return {
-                bannerSelected: null,
-                statusWitch: null,
+                categorySelected: null,
             };
         },
         computed: {
         },
 
         methods: {
-            async updateBanner(banner) {
-                this.bannerSelected = banner;
-                try {
-                    this.$api.banners.update(this.bannerSelected._id, { status: this.statusWitch ? 'active' : 'inactive' });
-                    this.statusWitch = null;
-                } catch (e) {
-                    this.$handleError(e);
-                }
-            },
-            onChange(banner) {
-                this.statusWitch = banner;
-            },
             async confirmDelete() {
                 try {
-                    await this.$api.banners.delete(this.bannerSelected._id);
-                    this.$message.success('Xóa banner thành công');
+                    await this.$api.categories.delete(this.categorySelected._id);
+                    this.$message.success('Xóa thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);

@@ -5,7 +5,7 @@
         :title="title"
     >
         <template v-if="content">
-            {{ content }}
+            <span class="text-lg">{{ content }}</span>
         </template>
         <slot v-else />
         <div slot="footer" class="flex justify-center items-center gap-2">
@@ -14,7 +14,7 @@
             </a-button>
             <a-button
                 :loading="loading"
-                class="w-28"
+                class="w-28 !bg-prim-100 border-transparent"
                 :type="confirmBtnType"
                 @click="handleConfirm"
             >

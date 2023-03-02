@@ -61,7 +61,7 @@
                         },
                     ],
                 }, {
-                    route: 'banners',
+                    route: '/banners',
                     label: 'Quản lý Banner',
                     icon: 'isax isax-gallery',
                 }, {

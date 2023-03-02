@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-table
-            :data-source="posts"
+            :data-source="blogs"
             :pagination="false"
             :scroll="{ x: 1200 }"
             :row-key="(row) => row._id"
@@ -31,7 +31,7 @@
                 :width="300"
             >
                 <template #default="record">
-                    <nuxt-link :to="`/posts/${record.slug}`" class="hover:underline overflow-hidden" style="display: -webkit-box; -webkit-box-orient: vertical;-webkit-line-clamp:2">
+                    <nuxt-link :to="`/blogs/${record.slug}`" class="hover:underline overflow-hidden" style="display: -webkit-box; -webkit-box-orient: vertical;-webkit-line-clamp:2">
                         {{ record.title }}
                     </nuxt-link>
                 </template>
@@ -83,11 +83,11 @@
                         </a-button>
                         <a-menu slot="overlay">
                             <a-menu-item>
-                                <nuxt-link :to="`/posts/${scope._id}/edit`">
+                                <nuxt-link :to="`/blogs/${scope._id}/edit`">
                                     Chỉnh sửa
                                 </nuxt-link>
                             </a-menu-item>
-                            <a-menu-item class="!text-danger-100" @click="() => { $refs.confirmDelete.open(), postSelected = scope }">
+                            <a-menu-item class="!text-danger-100" @click="() => { $refs.confirmDelete.open(), blogSelected = scope }">
                                 Xóa
                             </a-menu-item>
                         </a-menu>
@@ -116,7 +116,7 @@
         },
 
         props: {
-            posts: {
+            blogs: {
                 type: Array,
                 default: () => [],
             },
@@ -132,7 +132,7 @@
 
         data() {
             return {
-                postSelected: null,
+                blogSelected: null,
                 statusWitch: null,
             };
         },
@@ -142,9 +142,9 @@
 
         methods: {
             async updateStatus(post) {
-                this.postSelected = post;
+                this.blogSelected = post;
                 try {
-                    this.$api.posts.update(this.postSelected._id, { status: this.statusWitch ? 'active' : 'inactive' });
+                    this.$api.posts.update(this.blogSelected._id, { status: this.statusWitch ? 'active' : 'inactive' });
                     this.statusWitch = null;
                 } catch (e) {
                     this.$handleError(e);
@@ -155,7 +155,7 @@
             },
             async confirmDelete() {
                 try {
-                    await this.$api.posts.delete(this.postSelected.slug);
+                    await this.$api.posts.delete(this.blogSelected.slug);
                     this.$message.success('Xóa bài viết thành công');
                     this.$nuxt.refresh();
                 } catch (e) {

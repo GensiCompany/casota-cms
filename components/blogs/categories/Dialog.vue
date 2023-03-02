@@ -116,11 +116,11 @@
                 const formData = new FormData();
                 const imageSelected = document.querySelector('#thumbnailImage').files[0];
                 formData.append('image', imageSelected);
-                await this.$axios.post('https://minh-long.herokuapp.com/api/uploads', formData, {
+                await this.$axios.post('https://casota.herokuapp.com/api/uploads', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                     .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch((err) => console.log(err))
+                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
                     .finally(() => false);
             },
 

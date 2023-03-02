@@ -1,19 +1,21 @@
 <template>
     <div>
-        <PostsFilter class="card" />
+        <BlogsFilter class="card" />
         <div class="card mt-4">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý bài viết" />
                 <div class="flex gap-5">
-                    <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                        <i class="fas fa-plus mr-2" />
-                        Thêm mới
-                    </a-button>
+                    <nuxt-link to="/blogs/create">
+                        <a-button type="primary" class="!bg-prim-100 !border-prim-100">
+                            <i class="fas fa-plus mr-2" />
+                            Thêm mới
+                        </a-button>
+                    </nuxt-link>
                 </div>
             </div>
-            <PostsTable
+            <BlogsTable
                 class="mt-4"
-                :posts="posts"
+                :blogs="blogs"
                 :loading="loading"
                 :pagination="pagination"
             />
@@ -22,36 +24,28 @@
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    import PostsFilter from '@/components/blogs/Filter.vue';
-    import PostsTable from '@/components/blogs/Table.vue';
-    // import GiftEvent from '@/components/settings/gift/Table.vue';
-    // import DisplayEvent from '@/components/settings/tables/Display.vue';
-    // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
+    import BlogsFilter from '@/components/blogs/Filter.vue';
+    import BlogsTable from '@/components/blogs/Table.vue';
 
     export default {
         components: {
-            PostsFilter,
-            PostsTable,
-            // GiftEvent,
-            // DisplayEvent,
-            // TypeWheelEvent,
+            BlogsFilter,
+            BlogsTable,
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
         data() {
             return {
                 loading: false,
-                posts: [],
-                pagination: {},
             };
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('blogs', ['blogs', 'pagination']),
         },
 
         watch: {
@@ -70,7 +64,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('blogs/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
