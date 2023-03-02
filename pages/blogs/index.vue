@@ -66,7 +66,7 @@
                     this.loading = true;
                     await this.$store.dispatch('blogs/fetchAll');
                 } catch (error) {
-                    this.$handleError(error);
+                    // this.$handleError(error);
                 } finally {
                     this.loading = false;
                 }

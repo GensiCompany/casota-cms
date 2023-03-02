@@ -66,7 +66,7 @@
             async submitForm(payload) {
                 try {
                     this.loading = true;
-                    await this.$api.posts.create(payload);
+                    await this.$api.blogs.create(payload);
                     this.$message.success('Đăng bài viết thành công');
                     this.$router.push('/blogs');
                     this.$nuxt.refresh();

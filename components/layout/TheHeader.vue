@@ -11,10 +11,10 @@
         </div>
         <div class="flex items-center gap-6">
             <!-- <NotificationPopover /> -->
-            <nuxt-link to="/" class="font-semibold text-xl">
+            <a href="tel:0963395763" class="font-semibold text-xl">
                 <i class="isax isax-call text-2xl mr-2 relative -top-[2px]" />
-                <span>0123456789</span>
-            </nuxt-link>
+                <span>0963395763</span>
+            </a>
             <div class="flex items-center gap-2">
                 <a-avatar>
                     <i class="isax isax-user text-black" />

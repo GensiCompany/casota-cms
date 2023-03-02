@@ -40,7 +40,7 @@
                 :width="150"
             >
                 <template #default="createdAt">
-                    {{ createdAt | dateFormat('HH:mm dd/MM/yyyy') }}
+                    {{ createdAt | dateFormat('dd/MM/yyyy') }}
                 </template>
             </a-table-column>
             <a-table-column
