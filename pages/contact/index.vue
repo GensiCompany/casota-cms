@@ -11,20 +11,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="card flex-grow mt-4">
+            <ContactForm ref="contactForm" :contact="contacts" @submit="updateContact" />
+        </div>
     </div>
 </template>
 
 <script>
     // import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
+    import ContactForm from '@/components/contact/Form.vue';
     // import GiftEvent from '@/components/settings/gift/Table.vue';
     // import DisplayEvent from '@/components/settings/tables/Display.vue';
     // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
 
     export default {
-        layout: 'settings',
-
         components: {
+            ContactForm,
             // GiftEvent,
             // DisplayEvent,
             // TypeWheelEvent,
@@ -36,7 +40,7 @@
         data() {
             return {
                 loading: false,
-                images: [],
+                contacts: {},
             };
         },
 
@@ -49,8 +53,8 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách giải thưởng',
-                link: '/settings/gift-management',
+                label: 'Liên hệ',
+                link: '/contact',
             }]);
         },
 
@@ -66,6 +70,9 @@
                 } finally {
                     this.loading = false;
                 }
+            },
+            updateContact() {
+                console.log(1);
             },
         },
 

@@ -1,6 +1,6 @@
 /* eslint-disable vue/no-v-model-argument */
 <template>
-    <div class="bg-white a-the-sidebar-vertical max-h-screen h-full flex flex-col drop-shadow-xl" :class="[collapsed ? 'w-auto' : '!w-[260px]']">
+    <div class="bg-white a-the-sidebar-vertical max-h-screen h-full flex flex-col drop-shadow-md" :class="[collapsed ? 'w-auto' : '!w-[260px]']">
         <div class="h-[65px] flex justify-center items-center" :class="[collapsed ? 'px-4' : 'px-6']">
             <!-- <nuxt-link class="flex justify-center items-center mt-1" to="/">
                 <img src="/images/logo-white.svg" width="50">

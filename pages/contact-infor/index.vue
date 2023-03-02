@@ -49,8 +49,8 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách giải thưởng',
-                link: '/settings/gift-management',
+                label: 'Thông tin liên hệ',
+                link: '/contact-infor',
             }]);
         },
 

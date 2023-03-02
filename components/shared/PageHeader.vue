@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-wrap items-center gap-4 justify-between !text-black">
         <div class="flex justify-center flex-col gap-2">
-            <div class="text-3xl font-semibold flex items-center gap-2 cursor-pointer text-black">
+            <div class="text-2xl font-semibold flex items-center gap-2 cursor-pointer text-black">
                 <i v-if="showBack" class="fas fa-arrow-left text-2xl " @click="back" /> {{ text }}
             </div>
             <div v-if="smallText" class="text-sm">

@@ -25,8 +25,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-countup-v2": "^4.0.0",
     "vue-slick-carousel": "^1.0.6",
-    "vue-trading-view": "^1.0.1",
-    "vue-tradingview-widgets": "^1.2.4"
+    "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",

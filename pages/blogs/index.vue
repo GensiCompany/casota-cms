@@ -1,5 +1,6 @@
 <template>
     <div>
+        <PostsFilter class="card" />
         <div class="card mt-4">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý bài viết" />
@@ -10,6 +11,12 @@
                     </a-button>
                 </div>
             </div>
+            <PostsTable
+                class="mt-4"
+                :posts="posts"
+                :loading="loading"
+                :pagination="pagination"
+            />
         </div>
     </div>
 </template>
@@ -17,14 +24,16 @@
 <script>
     // import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
+    import PostsFilter from '@/components/blogs/Filter.vue';
+    import PostsTable from '@/components/blogs/Table.vue';
     // import GiftEvent from '@/components/settings/gift/Table.vue';
     // import DisplayEvent from '@/components/settings/tables/Display.vue';
     // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
 
     export default {
-        layout: 'settings',
-
         components: {
+            PostsFilter,
+            PostsTable,
             // GiftEvent,
             // DisplayEvent,
             // TypeWheelEvent,
@@ -36,7 +45,8 @@
         data() {
             return {
                 loading: false,
-                images: [],
+                posts: [],
+                pagination: {},
             };
         },
 
@@ -49,8 +59,8 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách giải thưởng',
-                link: '/settings/gift-management',
+                label: 'Danh sách blog',
+                link: '/blogs',
             }]);
         },
 

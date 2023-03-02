@@ -13,7 +13,7 @@
                         </nuxt-link>
                         <span v-else class="hover:underline" v-html="item.label" />
                     </a-breadcrumb-item>
-                    <i v-if="index !== links.length - 1" :key="`sperator_${item.link + index}`" class="fas fa-angle-right text-sm mx-2" />
+                    <i v-if="index !== links.length - 1" :key="`sperator_${item.link + index}`" class="isax isax-arrow-left text-sm mx-2" />
                 </template>
             </transition-group>
         </a-breadcrumb>

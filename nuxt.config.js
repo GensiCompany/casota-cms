@@ -5,13 +5,16 @@ const isProduction = process.env.NODE_ENV === 'production';
 export default {
     dev: !isProduction,
 
-    ssr: false,
-
     // When SPA
     loading: '@/components/shared/Loading.vue',
 
     // When SSR
-    loadingIndicator: false,
+    ssr: false,
+
+    // loadingIndicator: {
+    //     name: 'wandering-cubes',
+    //     color: '#22c55e',
+    // },
 
     head: {
         title: 'CASOTA CMS',
@@ -55,6 +58,7 @@ export default {
         '@/plugins/filters',
         '@/plugins/global-components',
         '@/plugins/aos.js',
+        { src: '@/plugins/google-maps', mode: 'client' },
     ],
 
     robots: [
@@ -147,11 +151,12 @@ export default {
         preload: true,
         download: false,
         families: {
-            Raleway: [300, 400, 500, 600, 700],
+            Cabin: [300, 400, 500, 600, 700],
         },
     },
 
     build: {
+        transpile: [/^vue2-google-maps($|\/)/],
         postcss: {
             plugins: {
                 tailwindcss: 'tailwind.config.js',

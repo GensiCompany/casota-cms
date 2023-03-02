@@ -11,14 +11,14 @@
             layout="vertical"
             :colon="false"
         >
-            <a-form-model-item label="Mật khẩu hiện tại" prop="oldPassword">
-                <a-input-password v-model="form.oldPassword" placeholder="Nhập mật khẩu hiện tại" />
+            <a-form-model-item label="Mật khẩu cũ" prop="oldPassword">
+                <a-input-password v-model="form.oldPassword" placeholder="Nhập mật khẩu cũ" />
             </a-form-model-item>
-            <a-form-model-item label="Mật khẩu mới" prop="newPassword">
+            <a-form-model-item class="!mt-4" label="Mật khẩu mới" prop="newPassword">
                 <a-input-password v-model="form.newPassword" placeholder="Nhập mật khẩu mới" />
             </a-form-model-item>
-            <a-form-model-item label="Nhập lại mật khẩu mới" prop="newPasswordConfirmation">
-                <a-input-password v-model="form.newPasswordConfirmation" placeholder="Nhập lại mật khẩu mới" />
+            <a-form-model-item class="!mt-4" label="Nhập lại mật khẩu mới" prop="confirmPassword">
+                <a-input-password v-model="form.confirmPassword" placeholder="Nhập lại mật khẩu mới" />
             </a-form-model-item>
         </a-form-model>
         <div slot="footer" class="flex justify-center items-center gap-2">
@@ -55,18 +55,17 @@
                 visible: false,
                 loading: false,
                 room: null,
-                encryptor: null,
                 form: {},
                 rules: {
                     oldPassword: [{
-                        required: true, message: 'Vui lòng nhập mật khẩu hiện tại', trigger: 'blur',
+                        required: true, message: 'Vui lòng nhập mật khẩu cũ', trigger: 'blur',
                     }],
                     newPassword: [{
                         required: true, message: 'Vui lòng nhập mật khẩu mới', trigger: 'blur',
                     }, {
                         validator: passwordValidtor, trigger: 'blur',
                     }],
-                    newPasswordConfirmation: [{
+                    confirmPassword: [{
                         validator: passwordConfirmValidator, triggler: 'blur',
                     }, {
                         required: true, message: 'Vui lòng nhập lại mật khẩu mới', trigger: 'blur',
@@ -81,21 +80,12 @@
             },
         },
 
-        mounted() {
-            const { JSEncrypt } = require('jsencrypt');
-            this.encryptor = (message) => {
-                const encrypt = new JSEncrypt();
-                encrypt.setPublicKey(process.env.RSA_PUBLIC_KEY);
-
-                return encrypt.encrypt(message);
-            };
-        },
-
         methods: {
             open() {
                 this.form = {
                     oldPassword: '',
                     newPassword: '',
+                    confirmPassword: '',
                 };
                 this.visible = true;
             },
@@ -109,16 +99,18 @@
                     if (valid) {
                         try {
                             this.loading = true;
-                            await this.$api.auth.updatePassword({
-                                oldPassword: this.form.oldPassword,
-                                newPassword: this.encryptor(this.form.newPassword),
-                            });
+                            await this.$api.auth.updatePassword(this.form);
                             this.$message.success('Cập nhật mật khẩu mới thành công');
                             this.close();
                             await this.$auth.logout();
                             this.$router.push('/login');
                         } catch (error) {
-                            this.$handleError(error);
+                            this.$handleError(error, (_error) => {
+                                const errorData = _error?.response?.data;
+                                if (errorData?.error?.code === 425) {
+                                    this.$message.warning('Mật khẩu cũ không chính xác');
+                                }
+                            });
                         } finally {
                             this.loading = false;
                         }

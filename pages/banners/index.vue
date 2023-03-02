@@ -11,20 +11,30 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4">
+            <BannerTable
+                :banners="banners"
+                :loading="loading"
+                :pagination="pagination"
+            />
+            <BannerDialog ref="bannerDialog" />
+        </div>
     </div>
 </template>
 
 <script>
     // import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
+    import BannerTable from '@/components/banners/Table.vue';
+    import BannerDialog from '@/components/banners/Dialog.vue';
     // import GiftEvent from '@/components/settings/gift/Table.vue';
     // import DisplayEvent from '@/components/settings/tables/Display.vue';
     // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
 
     export default {
-        layout: 'settings',
-
         components: {
+            BannerTable,
+            BannerDialog,
             // GiftEvent,
             // DisplayEvent,
             // TypeWheelEvent,
@@ -36,7 +46,8 @@
         data() {
             return {
                 loading: false,
-                images: [],
+                banners: [],
+                pagination: {},
             };
         },
 
@@ -49,8 +60,8 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách giải thưởng',
-                link: '/settings/gift-management',
+                label: 'Danh sách Banners',
+                link: '/banners',
             }]);
         },
 
