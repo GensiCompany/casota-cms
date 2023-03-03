@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card mt-4">
+        <div class="card">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý khách hàng" />
                 <div class="flex gap-5">
@@ -11,23 +11,22 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4">
+            <ClientsTable :clients="clients || []" :loading="loading" :pagination="pagination || {}" />
+        </div>
     </div>
 </template>
 
 <script>
     // import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    // import GiftEvent from '@/components/settings/gift/Table.vue';
-    // import DisplayEvent from '@/components/settings/tables/Display.vue';
-    // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
+    import ClientsTable from '@/components/clients/Table.vue';
 
     export default {
         layout: 'settings',
 
         components: {
-            // GiftEvent,
-            // DisplayEvent,
-            // TypeWheelEvent,
+            ClientsTable,
         },
 
         async fetch() {
@@ -36,7 +35,6 @@
         data() {
             return {
                 loading: false,
-                images: [],
             };
         },
 

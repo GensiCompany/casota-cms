@@ -16,6 +16,30 @@
     @apply text-prim-100;
 }
 
+.ant-table {
+    .ant-table-scroll {
+        .ant-table-body::-webkit-scrollbar-track {
+            border-radius: 10px;
+            background-color: transparent;
+        }
+
+        .ant-table-body::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+            background-color: transparent;
+        }
+
+        .ant-table-body::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: #CCCECC;
+        }
+
+        td {
+            @apply !border-prim-100/20;
+        }
+    }
+}
+
 // Table
 .ant-table-wrapper {
     .ant-table-selection {

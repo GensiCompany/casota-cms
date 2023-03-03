@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card mt-4">
+        <div class="card">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý sản phẩm" />
                 <div class="flex gap-5">
@@ -17,17 +17,9 @@
 <script>
     // import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    // import GiftEvent from '@/components/settings/gift/Table.vue';
-    // import DisplayEvent from '@/components/settings/tables/Display.vue';
-    // import TypeWheelEvent from '@/components/settings/tables/TypeWheel.vue';
 
     export default {
-        layout: 'settings',
-
         components: {
-            // GiftEvent,
-            // DisplayEvent,
-            // TypeWheelEvent,
         },
 
         async fetch() {

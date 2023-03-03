@@ -1,11 +1,12 @@
 <template>
     <div>
         <a-table
-            :data-source="categories"
+            :data-source="clients"
             :pagination="false"
             :scroll="{ x: 1200 }"
             :row-key="(row) => row._id"
             :loading="loading"
+            bordered
         >
             <a-table-column
                 key="index"
@@ -15,39 +16,43 @@
                 :custom-render="(text, record, index) => index + 1"
             />
             <a-table-column
-                key="thumbnail"
-                title="Thumbnail danh mục"
-                :width="150"
-                data-index="thumbnail"
+                key="fullName"
+                title="Họ và tên"
+                :width="100"
+                align="center"
             >
-                <template #default="thumbnail">
-                    <img
-                        v-if="thumbnail !== ''"
-                        :src="thumbnail"
-                        alt=""
-                        class="rounded-md w-full h-20 object-cover"
-                    >
-                    <p v-else>
-                        Không có dữ liệu
-                    </p>
+                <template #default="record">
+                    <span>{{ record.fullName }}</span>
                 </template>
             </a-table-column>
             <a-table-column
-                key="title"
-                title="Tên danh mục"
-                :width="300"
-                data-index="title"
+                key="email"
+                title="Email"
+                :width="100"
                 align="center"
-            />
-            <a-table-column
-                key="createdAt"
-                data-index="createdAt"
-                title="Ngày tạo"
-                align="center"
-                :width="150"
             >
-                <template #default="createdAt">
-                    {{ createdAt | dateFormat('dd/MM/yyyy') }}
+                <template #default="record">
+                    <span>{{ record.email }}</span>
+                </template>
+            </a-table-column>
+            <a-table-column
+                key="phoneNumber"
+                title="Số điện thoại"
+                :width="150"
+                align="center"
+            >
+                <template #default="record">
+                    <span>{{ record.phoneNumber }}</span>
+                </template>
+            </a-table-column>
+            <a-table-column
+                key="status"
+                title="Trạng thái"
+                :width="150"
+                align="center"
+            >
+                <template #default="record">
+                    <span>{{ record.status }}</span>
                 </template>
             </a-table-column>
             <a-table-column
@@ -55,54 +60,45 @@
                 title="Thao tác"
                 align="center"
                 :width="100"
-                fixed="right"
             >
-                <template #default="category">
+                <template #default="record">
                     <a-button
                         type="primary"
                         shape="circle"
-                        @click="() => {
-                            categorySelected = category,
-                            $refs.categoryDialog.open(category)
-                        }"
                     >
                         <i class="isax isax-pen" />
+                        <span class="hidden">{{ record }}</span>
                     </a-button>
                     <a-button
                         type="primary"
                         shape="circle"
-                        @click="() => {
-                            categorySelected = category,
-                            $refs.confirmDelete.open()}"
                     >
                         <i class="isax isax-trash" />
                     </a-button>
                 </template>
             </a-table-column>
         </a-table>
-
+        <Pagination class="mt-5" :data="pagination" />
         <ConfirmDialog
             ref="confirmDelete"
             title="Xóa danh mục"
             content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
         />
-        <CategoryDialog ref="categoryDialog" :category="categorySelected" />
     </div>
 </template>
 
 <script>
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
-    import CategoryDialog from '@/components/categories/Dialog.vue';
+    import Pagination from '@/components/shared/Pagination.vue';
 
     export default {
         components: {
+            Pagination,
             ConfirmDialog,
-            CategoryDialog,
         },
-
         props: {
-            categories: {
+            clients: {
                 type: Array,
                 default: () => [],
             },
@@ -110,11 +106,11 @@
                 type: Boolean,
                 default: false,
             },
+            pagination: {
+                type: Object,
+                required: false,
+            },
         },
-
-        // async asyncData({ store, query }) {
-        //     await store.dispatch('posts/categories/fetchAll', query);
-        // },
 
         data() {
             return {
@@ -123,11 +119,10 @@
         },
         computed: {
         },
-
         methods: {
             async confirmDelete() {
                 try {
-                    await this.$api.categories.delete(this.categorySelected._id);
+                    await this.$api.postCategories.delete(this.categorySelected._id);
                     this.$message.success('Xóa thành công');
                     this.$nuxt.refresh();
                 } catch (e) {

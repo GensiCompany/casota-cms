@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card mt-4">
+        <div class="card">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Thông tin liên hệ" />
                 <div class="flex gap-5">
