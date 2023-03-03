@@ -2,10 +2,10 @@ import { message as $message } from 'ant-design-vue';
 
 export default function ({ $axios, redirect }, inject) {
     $axios.onError((error) => {
-        const code = error?.response ? parseInt(error.response.status, 10) : null;
-        if (code === 401) {
-            redirect('/login');
-        }
+        // const code = error?.response ? parseInt(error.response.status, 10) : null;
+        // if (code === 401) {
+        //     redirect('/login');
+        // }
     });
 
     const handleError = (error, callback = null) => {
