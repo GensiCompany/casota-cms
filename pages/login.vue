@@ -64,30 +64,23 @@
 
         methods: {
             login(form) {
-                if (form.username === 'admin001' && form.password === 'admin001') {
-                    localStorage.setItem('auth', JSON.stringify(form));
+                this.$auth.loginWith('local', {
+                    data: form,
+                }).then(async () => {
+                    this.$auth.$storage.setLocalStorage('data', form);
+                    this.$message.success('Đăng nhập thành công');
                     this.$router.push('/');
-                } else {
-                    this.error = 'Tên đăng nhập hoặc mật khẩu không chính xác';
-                }
-                // this.$auth.loginWith('local',  {
-                //     data: form,
-                // }).then(async () => {
-                //     // login success and set data into localStorage
-                //     this.$auth.$storage.setLocalStorage('data', form);
-                //     message.success('Đăng nhập thành công');
-                //     this.$router.push('/');
-                // }).catch((error) => {
-                //     this.$handleError(error, (_error) => {
-                //         const errorData = _error?.response?.data;
-                //         this.error = 'Tên đăng nhập hoặc mật khẩu không chính xác';
-                //         if (errorData?.code === 401) {
-                //             this.$forceUpdate();
-                //         }
-                //     });
-                // }).finally(() => {
-                //     this.loading = false;
-                // });
+                }).catch((error) => {
+                    this.$handleError(error, (_error) => {
+                        const errorData = _error?.response?.data;
+                        this.error = 'Tên đăng nhập hoặc mật khẩu không chính xác';
+                        if (errorData?.code === 401) {
+                            this.$forceUpdate();
+                        }
+                    });
+                }).finally(() => {
+                    this.loading = false;
+                });
             },
         },
 

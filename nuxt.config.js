@@ -101,49 +101,45 @@ export default {
         baseURL: process.env.API_HOST,
     },
 
-    // auth: {
-    //     strategies: {
-    //         local: {
-    //             token: {
-    //                 property: 'data.sid',
-    //                 global: true,
-    //                 required: true,
-    //                 name: 'auth',
-    //                 maxAge: 60 * 60 * 24 * 30,
-    //                 type: false,
-    //             },
-    //             autoLogout: false,
-    //             user: {
-    //                 property: 'data.account',
-    //                 autoFetch: true,
-    //             },
-    //             endpoints: {
-    //                 login: {
-    //                     url: `${process.env.API_HOST}/user/login`,
-    //                     method: 'POST',
-    //                 },
-    //                 logout: {
-    //                     url: `${process.env.API_HOST}/user/logout`,
-    //                     method: 'GET',
-    //                 },
-    //                 user: {
-    //                     url: `${process.env.API_HOST}/user/get_profile`,
-    //                     method: 'POST',
-    //                 },
-    //             },
-    //             redirect: {
-    //                 login: '/login',
-    //                 logout: '/',
-    //                 callback: '/login',
-    //                 home: '/',
-    //             },
-    //         },
-    //     },
-    // },
+    auth: {
+        strategies: {
+            local: {
+                token: {
+                    property: 'data.accessToken',
+                    global: true,
+                    required: true,
+                    maxAge: 60 * 60 * 24 * 30,
+                    type: 'Bearer',
+                },
+                autoLogout: false,
+                user: {
+                    property: 'data.admin',
+                    autoFetch: true,
+                },
+                endpoints: {
+                    login: {
+                        url: `${process.env.API_HOST}/a/sessions/login`,
+                        method: 'POST',
+                    },
+                    logout: false,
+                    user: {
+                        url: `${process.env.API_HOST}/a/sessions/current_admin`,
+                        method: 'GET',
+                    },
+                },
+                redirect: {
+                    login: '/login',
+                    logout: '/',
+                    callback: '/login',
+                    home: '/',
+                },
+            },
+        },
+    },
 
-    // router: {
-    //     middleware: ['auth'],
-    // },
+    router: {
+        middleware: ['auth'],
+    },
 
     googleFonts: {
         prefetch: true,
