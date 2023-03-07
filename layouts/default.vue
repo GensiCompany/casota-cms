@@ -24,12 +24,5 @@
             TheHeader,
             TheFooter,
         },
-
-        mounted() {
-            const auth = localStorage.getItem('auth');
-            if (!auth) {
-                this.$router.push('/login');
-            }
-        },
     };
 </script>

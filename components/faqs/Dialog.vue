@@ -19,11 +19,10 @@
                         <a-input
                             v-model="form.title"
                             placeholder="Nhập tiêu đề bài viết"
-                            :disabled="isEdit"
                         />
                     </a-form-model-item>
                 </div>
-                <Editor :content-props="form.content" :is-edit="isEdit" @getContent="getContent" />
+                <Editor :content-props="form.content" @getContent="getContent" />
             </div>
         </a-form-model>
         <div slot="footer" class="flex justify-center items-center gap-2">

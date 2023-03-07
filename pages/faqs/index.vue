@@ -13,7 +13,7 @@
         </div>
 
         <div class="mt-8 grid grid-cols-1 gap-5">
-            <div class="xl:max-w-[80%] w-full mx-auto">
+            <!-- <div class="xl:max-w-[80%] w-full mx-auto">
                 <div class="flex justify-between items-center bg-[#f1f1f1] py-3 px-3 rounded-t-sm">
                     <div class="flex items-center gap-3">
                         <span class="bg-prim-100 text-white rounded-full text-center text-lg w-8 h-8 leading-8">1</span>
@@ -155,7 +155,9 @@
                 <div class="py-3 px-5 rounded-b-md border-x-[2px] border-b-[2px] border-solid border-gray-10">
                     Đây là câu trả lời cho câu hỏi
                 </div>
-            </div>
+            </div> -->
+
+            <FaqsQuestion v-for="faq in faqs" :key="faq._id" :faq="faq" />
         </div>
 
         <FaqsDialog ref="FaqsDialog" />
@@ -163,17 +165,19 @@
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import FaqsDialog from '@/components/faqs/Dialog.vue';
+    import FaqsQuestion from '@/components/faqs/Question.vue';
 
     export default {
         components: {
             FaqsDialog,
+            FaqsQuestion,
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
         data() {
             return {
@@ -182,7 +186,7 @@
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('faqs', ['faqs', 'pagination']),
         },
 
         watch: {
@@ -201,7 +205,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('faqs/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
