@@ -4,33 +4,33 @@
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý khách hàng" />
                 <div class="flex gap-5">
-                    <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                        <i class="fas fa-plus mr-2" />
-                        Thêm mới
-                    </a-button>
+                    <nuxt-link to="/users/create">
+                        <a-button type="primary" class="!bg-prim-100 !border-prim-100">
+                            <i class="fas fa-plus mr-2" />
+                            Thêm mới
+                        </a-button>
+                    </nuxt-link>
                 </div>
             </div>
         </div>
         <div class="card mt-4">
-            <ClientsTable :clients="clients || []" :loading="loading" :pagination="pagination || {}" />
+            <UsersTable :users="users" :loading="loading" :pagination="pagination" />
         </div>
     </div>
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    import ClientsTable from '@/components/clients/Table.vue';
+    import UsersTable from '@/components/users/Table.vue';
 
     export default {
-        layout: 'settings',
-
         components: {
-            ClientsTable,
+            UsersTable,
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
         data() {
             return {
@@ -39,7 +39,7 @@
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('users', ['users', 'pagination']),
         },
 
         watch: {
@@ -58,7 +58,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('users/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

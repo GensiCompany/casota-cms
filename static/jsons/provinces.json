@@ -1,0 +1,443 @@
+[
+	{
+		"id" : 1,
+		"code" : "1",
+		"title" : "Thành phố Hà Nội",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 2,
+		"code" : "2",
+		"title" : "Tỉnh Hà Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 3,
+		"code" : "4",
+		"title" : "Tỉnh Cao Bằng",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 4,
+		"code" : "6",
+		"title" : "Tỉnh Bắc Kạn",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 5,
+		"code" : "8",
+		"title" : "Tỉnh Tuyên Quang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 6,
+		"code" : "10",
+		"title" : "Tỉnh Lào Cai",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 7,
+		"code" : "11",
+		"title" : "Tỉnh Điện Biên",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 8,
+		"code" : "12",
+		"title" : "Tỉnh Lai Châu",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 9,
+		"code" : "14",
+		"title" : "Tỉnh Sơn La",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 10,
+		"code" : "15",
+		"title" : "Tỉnh Yên Bái",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 11,
+		"code" : "17",
+		"title" : "Tỉnh Hoà Bình",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 12,
+		"code" : "19",
+		"title" : "Tỉnh Thái Nguyên",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 13,
+		"code" : "20",
+		"title" : "Tỉnh Lạng Sơn",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 14,
+		"code" : "22",
+		"title" : "Tỉnh Quảng Ninh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 15,
+		"code" : "24",
+		"title" : "Tỉnh Bắc Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 16,
+		"code" : "25",
+		"title" : "Tỉnh Phú Thọ",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 17,
+		"code" : "26",
+		"title" : "Tỉnh Vĩnh Phúc",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 18,
+		"code" : "27",
+		"title" : "Tỉnh Bắc Ninh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 19,
+		"code" : "30",
+		"title" : "Tỉnh Hải Dương",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 20,
+		"code" : "31",
+		"title" : "Thành phố Hải Phòng",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 21,
+		"code" : "33",
+		"title" : "Tỉnh Hưng Yên",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 22,
+		"code" : "34",
+		"title" : "Tỉnh Thái Bình",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 23,
+		"code" : "35",
+		"title" : "Tỉnh Hà Nam",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 24,
+		"code" : "36",
+		"title" : "Tỉnh Nam Định",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 25,
+		"code" : "37",
+		"title" : "Tỉnh Ninh Bình",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 26,
+		"code" : "38",
+		"title" : "Tỉnh Thanh Hóa",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 27,
+		"code" : "40",
+		"title" : "Tỉnh Nghệ An",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 28,
+		"code" : "42",
+		"title" : "Tỉnh Hà Tĩnh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 29,
+		"code" : "44",
+		"title" : "Tỉnh Quảng Bình",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 30,
+		"code" : "45",
+		"title" : "Tỉnh Quảng Trị",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 31,
+		"code" : "46",
+		"title" : "Tỉnh Thừa Thiên Huế",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 32,
+		"code" : "48",
+		"title" : "Thành phố Đà Nẵng",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 33,
+		"code" : "49",
+		"title" : "Tỉnh Quảng Nam",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 34,
+		"code" : "51",
+		"title" : "Tỉnh Quảng Ngãi",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 35,
+		"code" : "52",
+		"title" : "Tỉnh Bình Định",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 36,
+		"code" : "54",
+		"title" : "Tỉnh Phú Yên",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 37,
+		"code" : "56",
+		"title" : "Tỉnh Khánh Hòa",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 38,
+		"code" : "58",
+		"title" : "Tỉnh Ninh Thuận",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 39,
+		"code" : "60",
+		"title" : "Tỉnh Bình Thuận",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 40,
+		"code" : "62",
+		"title" : "Tỉnh Kon Tum",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 41,
+		"code" : "64",
+		"title" : "Tỉnh Gia Lai",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 42,
+		"code" : "66",
+		"title" : "Tỉnh Đắk Lắk",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 43,
+		"code" : "67",
+		"title" : "Tỉnh Đắk Nông",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 44,
+		"code" : "68",
+		"title" : "Tỉnh Lâm Đồng",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 45,
+		"code" : "70",
+		"title" : "Tỉnh Bình Phước",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 46,
+		"code" : "72",
+		"title" : "Tỉnh Tây Ninh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 47,
+		"code" : "74",
+		"title" : "Tỉnh Bình Dương",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 48,
+		"code" : "75",
+		"title" : "Tỉnh Đồng Nai",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 49,
+		"code" : "77",
+		"title" : "Tỉnh Bà Rịa - Vũng Tàu",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 50,
+		"code" : "79",
+		"title" : "Thành phố Hồ Chí Minh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 51,
+		"code" : "80",
+		"title" : "Tỉnh Long An",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 52,
+		"code" : "82",
+		"title" : "Tỉnh Tiền Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 53,
+		"code" : "83",
+		"title" : "Tỉnh Bến Tre",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 54,
+		"code" : "84",
+		"title" : "Tỉnh Trà Vinh",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 55,
+		"code" : "86",
+		"title" : "Tỉnh Vĩnh Long",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 56,
+		"code" : "87",
+		"title" : "Tỉnh Đồng Tháp",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 57,
+		"code" : "89",
+		"title" : "Tỉnh An Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 58,
+		"code" : "91",
+		"title" : "Tỉnh Kiên Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 59,
+		"code" : "92",
+		"title" : "Thành phố Cần Thơ",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 60,
+		"code" : "93",
+		"title" : "Tỉnh Hậu Giang",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 61,
+		"code" : "94",
+		"title" : "Tỉnh Sóc Trăng",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 62,
+		"code" : "95",
+		"title" : "Tỉnh Bạc Liêu",
+		"createdAt" : null,
+		"updatedAt" : null
+	},
+	{
+		"id" : 63,
+		"code" : "96",
+		"title" : "Tỉnh Cà Mau",
+		"createdAt" : null,
+		"updatedAt" : null
+	}
+]

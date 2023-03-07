@@ -6,7 +6,6 @@
             :scroll="{ x: 1200 }"
             :row-key="(row) => row._id"
             :loading="loading"
-            bordered
         >
             <a-table-column
                 key="index"

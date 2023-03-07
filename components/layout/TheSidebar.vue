@@ -73,7 +73,7 @@
                     label: 'Danh mục',
                     icon: 'isax isax-task',
                 }, {
-                    route: '/clients',
+                    route: '/users',
                     label: 'Khách hàng',
                     icon: 'isax isax-profile-2user',
                 }, {

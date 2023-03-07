@@ -17,7 +17,7 @@
                             @change="changeStatus"
                         />
                     </div>
-                    <a-dropdown placement="bottomLeft" :trigger="['click']">
+                    <a-dropdown placement="bottomRight" :trigger="['click']">
                         <a-button class="!mr-0" size="small">
                             <i class="fas fa-ellipsis-h" />
                         </a-button>

@@ -252,6 +252,11 @@
                 this.isSelectedAll = true;
             },
 
+            emptyOptions() {
+                this.options = [];
+                this.selectionItems = [];
+            },
+
             async handleSearch(searchStr) {
                 if (this.fetchDebounce) {
                     await this.fetchDebounce.cancel();
