@@ -2,7 +2,7 @@
     <a-modal
         v-model="visible"
         destroy-on-close
-        :title="_isEmpty(feedback) ? 'Thêm mới câu hỏi' : 'Chỉnh sửa câu hỏi'"
+        :title="_isEmpty(faq) ? 'Thêm mới câu hỏi' : 'Chỉnh sửa câu hỏi'"
     >
         <a-form-model
             ref="form"
@@ -14,11 +14,11 @@
                 <div>
                     <a-form-model-item
                         prop="title"
-                        label="Tiêu đề bài viết"
+                        label="Tiêu đề câu hỏi"
                     >
                         <a-input
                             v-model="form.title"
-                            placeholder="Nhập tiêu đề bài viết"
+                            placeholder="Nhập tiêu đề câu hỏi"
                         />
                     </a-form-model-item>
                 </div>
@@ -35,46 +35,48 @@
                 type="primary"
                 @click="submit"
             >
-                {{ _isEmpty(feedback) ? "Thêm mới" : "Cập nhật" }}
+                {{ _isEmpty(faq) ? "Thêm mới" : "Cập nhật" }}
             </a-button>
         </div>
     </a-modal>
 </template>
 
 <script>
+    import _cloneDeep from 'lodash/cloneDeep';
     import _isEmpty from 'lodash/isEmpty';
     import Editor from '@/components/shared/Editor.vue';
+
+    const defaultForm = {
+        title: '',
+        content: '',
+    };
 
     export default {
         components: {
             Editor,
         },
+
         props: {
         },
+
         data() {
             return {
-                previewVisible: false,
-                previewImage: '',
-                fileList: [],
                 visible: false,
                 loading: false,
-                room: null,
-                form: {
-                    content: '',
-                    thumbnail: '',
-                },
-                fileName: null,
-                feedback: null,
+                faq: null,
             };
         },
+
+        computed: {
+            form() {
+                return this.faq ? _cloneDeep(this.faq) : _cloneDeep(defaultForm);
+            },
+        },
+
         methods: {
             _isEmpty,
-            open(feedback) {
-                this.feedback = feedback;
-                this.form = {
-                    description: feedback ? feedback.description : '',
-                    thumbnail: feedback ? feedback.thumbnail : '',
-                };
+            open(faq) {
+                this.faq = faq;
                 this.visible = true;
             },
 
@@ -86,20 +88,40 @@
                 this.form.content = content;
             },
 
+            async create(form) {
+                try {
+                    await this.$api.faqs.create(form);
+                    this.$message.success('Thêm mới câu hỏi thành công');
+                } catch (error) {
+                    this.$handleError(error);
+                }
+            },
+
+            async update(form) {
+                try {
+                    await this.$api.faqs.update(form._id, form);
+                    this.$message.success('Cập nhật câu hỏi thành công');
+                } catch (error) {
+                    this.$handleError(error);
+                }
+            },
+
             async submit() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
                         try {
                             this.loading = true;
-                            await this.handlerThumbnail();
-                            await this.$api.feedbacks.create({ ...this.form, status: 'active' });
-                            this.$message.success('Thêm Phản hồi thành công');
-                            this.close();
-                            await this.$store.dispatch('feedbacks/fetchAll', { ...this.$route.query, createdBy: 'admin' });
+                            if (_isEmpty(this.faq)) {
+                                await this.create(this.form);
+                            } else {
+                                await this.update(this.form);
+                            }
+                            this.$nuxt.refresh();
                         } catch (error) {
                             this.$handleError(error);
                         } finally {
                             this.loading = false;
+                            this.close();
                         }
                     }
                 });
