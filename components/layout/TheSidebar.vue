@@ -81,7 +81,7 @@
                     label: 'Đơn hàng',
                     icon: 'isax isax-shopping-cart',
                 }, {
-                    route: '/questions',
+                    route: '/faqs',
                     label: 'Câu hỏi thường gặp',
                     icon: 'isax isax-message-question',
                 }, {
