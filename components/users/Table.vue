@@ -17,7 +17,7 @@
             <a-table-column
                 key="fullName"
                 title="Họ và tên"
-                :width="150"
+                :width="180"
                 align="left"
             >
                 <template #default="record">
@@ -50,7 +50,7 @@
             <a-table-column
                 key="phoneNumber"
                 title="Số điện thoại"
-                :width="150"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
@@ -71,7 +71,7 @@
             <a-table-column
                 key="gender"
                 title="Giới tính"
-                :width="100"
+                :width="80"
                 align="center"
             >
                 <template #default="record">
@@ -81,17 +81,19 @@
             <a-table-column
                 key="status"
                 title="Trạng thái"
-                :width="120"
+                :width="100"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.status }}</span>
+                    <a-tag :color="STATUS_COLOR[record.status]">
+                        {{ STATUS_LABEL[record.status] }}
+                    </a-tag>
                 </template>
             </a-table-column>
             <a-table-column
                 key="createdAt"
                 title="Ngày tạo"
-                :width="120"
+                :width="100"
                 align="center"
             >
                 <template #default="record">
@@ -120,7 +122,13 @@
                                     Chỉnh sửa
                                 </nuxt-link>
                             </a-menu-item>
-                            <a-menu-item class="!text-danger-100" @click="refs.ConfirmDialog.open()">
+                            <a-menu-item
+                                class="!text-danger-100"
+                                @click="() => {
+                                    userSelected = record,
+                                    $refs.ConfirmDialog.open();
+                                }"
+                            >
                                 Xóa
                             </a-menu-item>
                         </a-menu>
@@ -128,14 +136,19 @@
                 </template>
             </a-table-column>
         </a-table>
-
         <Pagination class="mt-5" :data="pagination" />
         <ConfirmDialog
-            ref="confirmDelete"
-            title="Xóa danh mục"
-            content="Bạn chắc chắn xóa danh mục này ?"
+            ref="ConfirmDialog"
+            title="Xóa người dùng"
             @confirm="confirmDelete"
-        />
+        >
+            <div class="text-center">
+                <p class="text-lg">
+                    Bạn chắc chắn xóa người dùng này chứ?
+                </p>
+                <span class="block"><span class="font-semibold">Lưu ý</span>: hành động sẽ không thể hoàn tác</span>
+            </div>
+        </ConfirmDialog>
     </div>
 </template>
 
@@ -144,6 +157,7 @@
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
     import { mapDataFromOptions } from '@/utils/data';
     import { USER_GENDER_OPTIONS } from '@/constants/user/gender';
+    import { USER_STATUS_OPTIONS } from '@/constants/user/status';
 
     export default {
         components: {
@@ -168,13 +182,20 @@
         data() {
             return {
                 USER_GENDER_OPTIONS,
-                categorySelected: null,
+                USER_STATUS_OPTIONS,
+                userSelected: null,
             };
         },
 
         computed: {
             GENDER_LABEL() {
                 return this.mapDataFromOptions(USER_GENDER_OPTIONS, 'value', 'label');
+            },
+            STATUS_LABEL() {
+                return this.mapDataFromOptions(USER_STATUS_OPTIONS, 'value', 'label');
+            },
+            STATUS_COLOR() {
+                return this.mapDataFromOptions(USER_STATUS_OPTIONS, 'value', 'color');
             },
         },
 
@@ -183,8 +204,8 @@
 
             async confirmDelete() {
                 try {
-                    await this.$api.postCategories.delete(this.categorySelected._id);
-                    this.$message.success('Xóa thành công');
+                    await this.$api.users.delete(this.userSelected._id);
+                    this.$message.success('Xóa người dùng thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);

@@ -2,23 +2,29 @@
     <div>
         <div class="card">
             <div class="flex justify-between items-center">
-                <ct-page-header show-back text="Quản lý khách hàng" />
+                <ct-page-header show-back text="Thêm mới người dùng" />
                 <div class="flex gap-5">
-                    <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                        <i class="fas fa-plus mr-2" />
-                        Thêm mới
+                    <a-button
+                        :loading="loading"
+                        type="primary"
+                        class="!bg-prim-100 !border-prim-100"
+                        @click="$refs.UsersForm.submit()"
+                    >
+                        <i class="fas fa-pen mr-2" />
+                        Tạo mới
                     </a-button>
                 </div>
             </div>
         </div>
-        <div class="mt-6">
-            <UsersForm ref="UsersForm" />
-        </div>
+        <a-spin :spinning="loading">
+            <div class="mt-6">
+                <UsersForm ref="UsersForm" :is-edit="true" @submit="createUser" />
+            </div>
+        </a-spin>
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import UsersForm from '@/components/users/Form.vue';
 
@@ -27,17 +33,10 @@
             UsersForm,
         },
 
-        async fetch() {
-            await this.fetchData();
-        },
         data() {
             return {
                 loading: false,
             };
-        },
-
-        computed: {
-            ...mapState('users', ['users', 'pagination']),
         },
 
         watch: {
@@ -46,10 +45,10 @@
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [
                 {
-                    label: 'Quản lý khách hàng',
+                    label: 'Quản lý người dùng',
                     link: '/users',
                 }, {
-                    label: 'Thêm mới khách hàng',
+                    label: 'Thêm mới người dùng',
                     link: '/users/create',
                 },
             ]);
@@ -58,10 +57,13 @@
         methods: {
             mapDataFromOptions,
 
-            async fetchData() {
+            async createUser(form) {
                 try {
                     this.loading = true;
-                    await this.$store.dispatch('users/fetchAll');
+                    await this.$api.users.create(form);
+                    this.$message.success('Tạo mới người dùng thành công');
+                    this.$nuxt.refresh();
+                    this.$router.push('/users');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
@@ -72,7 +74,7 @@
 
         head() {
             return {
-                title: 'Quản lý khách hàng',
+                title: 'Thêm mới người dùng',
             };
         },
     };

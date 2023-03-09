@@ -1,5 +1,6 @@
 import Auth from '@/api/auth';
 import Users from '@/api/users';
+import Uploaders from '@/api/uploaders';
 import Banners from '@/api/banners';
 import Blogs from '@/api/blogs';
 import Categories from '@/api/categories';
@@ -14,6 +15,7 @@ export default (context, inject) => {
         blogs: Blogs(context.$axios),
         categories: Categories(context.$axios),
         faqs: Faqs(context.$axios),
+        uploaders: Uploaders(context.$axios),
     };
 
     // Inject $api

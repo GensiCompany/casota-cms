@@ -2,6 +2,12 @@ import Districts from '@/static/jsons/districts.json';
 import Provinces from '@/static/jsons/provinces.json';
 import Wards from '@/static/jsons/wards.json';
 
+// const emptyState = () => ({
+//     provinces: [],
+//     districts: [],
+//     wards: [],
+// });
+
 export const state = () => ({
     provinces: [],
     districts: [],
@@ -15,6 +21,10 @@ export const mutations = {
     SET_STATE(state, { prop, data }) {
         state[prop] = data;
     },
+
+    EMPTY_STATE(state, { prop, data }) {
+        state[prop] = data;
+    },
 };
 
 export const actions = {
@@ -24,12 +34,12 @@ export const actions = {
     },
 
     async fetchDistricts({ commit }, payload) {
-        const districts = Districts.filter((district) => district.provinceId === payload.provinceId);
+        const districts = Districts.filter((district) => +district.provinceId === +payload.provinceId);
         commit('SET_STATE', { prop: 'districts', data: districts });
     },
 
     async fetchWards({ commit }, payload) {
-        const wards = Wards.filter((ward) => ward.districtId === payload.districtId);
+        const wards = Wards.filter((ward) => +ward.districtId === +payload.districtId);
         commit('SET_STATE', { prop: 'wards', data: wards });
     },
 };

@@ -19,7 +19,9 @@
             :filter-option="false"
             :not-found-content="null"
             @change="handleSelect"
-            @search="handleSearch"
+            @mouseenter="handleSearch('')"
+            @popupScroll="loadMore"
+            @focus="mode === 'multiple' ? handleSearch('') : '' "
         >
             <a-select-option v-for="(item, index) in options" :key="`${storeProp}-${index}`" :value="item.value">
                 {{ item.label }}
@@ -37,6 +39,7 @@
     import _join from 'lodash/join';
     import _remove from 'lodash/remove';
     import _split from 'lodash/split';
+    import _uniqBy from 'lodash/uniqBy';
     import { mapState } from 'vuex';
 
     export default {
@@ -72,7 +75,7 @@
             },
             searchKey: {
                 type: String,
-                default: 'keyWord',
+                default: 'freeWord',
             },
             size: {
                 type: String,
@@ -100,6 +103,10 @@
                 type: String,
                 default: 'default',
             },
+            params: {
+                type: Object,
+                default: () => {},
+            },
             bordered: {
                 type: Boolean,
                 default: true,
@@ -125,14 +132,18 @@
         },
 
         data() {
+            const value = this.value === null ? undefined : this.value;
+
             const defaultValue = this.router
                 ? this.$route.query[this.query] || undefined
-                : this.value;
+                : value;
 
             return {
                 data: [],
                 options: [],
+                page: 1,
                 selectionItems: [],
+                dataState: [],
                 isSelectedAll: false,
                 loading: false,
                 fetchDebounce: null,
@@ -167,8 +178,31 @@
             },
 
             value(data) {
-                this.selectValue = data;
+                this.selectValue = data === null ? undefined : data;
             },
+
+            state() {
+                this.selectionItems = _uniqBy([...this.selectionItems, ...this.customOptions, ...this.state], 'id');
+            },
+
+            async autoFetch() {
+                if (this.autoFetch) {
+                    await this.fetchData();
+                }
+            },
+
+            customOptions() {
+                this.selectionItems = _uniqBy([...this.selectionItems, ...this.customOptions, ...this.state], 'id');
+            },
+
+            selectionItems() {
+                this.options = _map(this.selectionItems, (option) => ({
+                    label: _get(option, this.optionLabel),
+                    value: _get(option, this.optionValue),
+                }));
+                _remove(this.options, (option) => !option.label || !option.value);
+            },
+
         },
 
         async mounted() {
@@ -179,7 +213,7 @@
                 this.$emit('input', this.options[0]?.value);
             }
 
-            this.selectionItems = [...this.customOptions, ...this.state];
+            this.selectionItems = _uniqBy([...this.customOptions, ...this.state], 'id');
             this.options = _map(this.selectionItems, (option) => ({
                 label: _get(option, this.optionLabel),
                 value: _get(option, this.optionValue),
@@ -188,27 +222,23 @@
         },
 
         methods: {
-            async fetchData(searchStr, params) {
+            async fetchData(searchStr, params, type) {
                 try {
                     this.loading = true;
                     if (this.fetchUrl) {
                         await this.$store.dispatch(this.fetchUrl, {
                             ...this.searchParams,
                             ...params,
-                            query: {
-                                [this.searchKey]: searchStr,
-                                ...this.searchParams?.query,
-                                ...params,
-                            },
+                            ...this.params,
+                            [this.searchKey]: searchStr || undefined,
+                            ...this.searchParams?.query,
                         });
                     }
-                    this.selectionItems = [...this.customOptions, ...this.state];
-
-                    this.options = _map(this.selectionItems, (option) => ({
-                        label: _get(option, this.optionLabel),
-                        value: _get(option, this.optionValue),
-                    }));
-                    _remove(this.options, (option) => !option.label || !option.value);
+                    if (type === 'loadmore') {
+                        this.selectionItems = _uniqBy([...this.selectionItems, ...this.customOptions, ...this.state], 'id');
+                    } else {
+                        this.selectionItems = _uniqBy([...this.customOptions, ...this.state], 'id');
+                    }
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
@@ -232,13 +262,13 @@
                         this.$router.push({
                             query: _assign({}, this.$route.query, {
                                 [this.query]: queryValue,
-                                start: 0,
+                                page: 1,
                             }),
                         });
                     } else {
                         this.$router.push({
                             query: _assign({}, _omit(this.$route.query, [this.query]), {
-                                start: 0,
+                                page: 1,
                             }),
                         });
                     }
@@ -255,6 +285,7 @@
             emptyOptions() {
                 this.options = [];
                 this.selectionItems = [];
+                this.$forceUpdate();
             },
 
             async handleSearch(searchStr) {
@@ -266,6 +297,14 @@
                 }, 200);
                 await this.fetchDebounce();
                 await this.$forceUpdate();
+            },
+
+            async loadMore(e) {
+                const { scrollTop, clientHeight, scrollHeight } = e.target;
+                if (!this.loading && Math.ceil(scrollTop + clientHeight) === scrollHeight) {
+                    this.page += 1;
+                    this.fetchData('', { page: this.page }, 'loadmore');
+                }
             },
         },
     };

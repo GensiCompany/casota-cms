@@ -1,6 +1,6 @@
 export const USER_STATUS = {
-    INACTIVE: 0,
-    ACTIVE: 1,
+    INACTIVE: 'inactive',
+    ACTIVE: 'active',
 };
 
 export const USER_STATUS_OPTIONS = [{
@@ -9,6 +9,6 @@ export const USER_STATUS_OPTIONS = [{
     value: USER_STATUS.ACTIVE,
 }, {
     label: 'Không hoạt động',
-    color: 'danger',
+    color: 'red',
     value: USER_STATUS.INACTIVE,
 }];

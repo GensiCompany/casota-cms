@@ -6,7 +6,7 @@
                 <div class="flex gap-5">
                     <nuxt-link to="/users/create">
                         <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                            <i class="fas fa-plus mr-2" />
+                            <i class="fas fa-pen mr-2" />
                             Thêm mới
                         </a-button>
                     </nuxt-link>
@@ -47,8 +47,8 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách khách hàng',
-                link: '/clients',
+                label: 'Danh sách người dùng',
+                link: '/users',
             }]);
         },
 
@@ -69,7 +69,7 @@
 
         head() {
             return {
-                title: 'Quản lý khách hàng',
+                title: 'Quản lý người đùng',
             };
         },
     };
