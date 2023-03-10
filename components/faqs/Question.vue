@@ -3,7 +3,9 @@
         <div class="xl:max-w-[80%] w-full mx-auto">
             <div class="flex justify-between items-center bg-[#f1f1f1] py-3 px-3 rounded-t-sm">
                 <div class="flex items-center gap-3">
-                    <span class="bg-prim-100 text-white rounded-full text-center text-lg w-8 h-8 leading-8">1</span>
+                    <span class="bg-prim-100 text-white rounded-full text-center text-lg w-8 h-8 leading-8">
+                        {{ index + 1 }}
+                    </span>
                     <h2 class="text-xl mb-0">
                         {{ faq.title }}
                     </h2>
@@ -63,20 +65,21 @@
             loading: {
                 type: Boolean,
             },
+            index: {
+                type: [Boolean, Number],
+            },
         },
 
         data() {
             return {
+                isActive: null,
+                statusLabel: '',
             };
         },
 
-        computed: {
-            isActive() {
-                return _cloneDeep(this.faq.status) === 'active';
-            },
-            statusLabel() {
-                return _cloneDeep(this.faq.status) === 'active' ? 'Đang hiển thị' : 'Bị ẩn';
-            },
+        mounted() {
+            this.isActive = _cloneDeep(this.faq.status) === 'active';
+            this.statusLabel = _cloneDeep(this.faq.status) === 'active' ? 'Đang hiển thị' : 'Bị ẩn';
         },
 
         methods: {
@@ -96,6 +99,8 @@
 
             async changeStatus() {
                 try {
+                    this.isActive = !this.isActive;
+                    this.statusLabel = this.statusLabel === 'Đang hiển thị' ? 'Bị ẩn' : 'Đang hiển thị';
                     await this.$api.faqs.update(
                         this.faq._id, {
                             ...this.faq,

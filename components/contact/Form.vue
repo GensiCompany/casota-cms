@@ -5,7 +5,6 @@
             :model="form"
             :rules="rules"
             layout="vertical"
-            :colon="false"
         >
             <div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2 mb-2">
@@ -24,37 +23,43 @@
                 </a-form-model-item>
             </div>
         </a-form-model>
-        <GmapMap
-            ref="gmapMap"
-            class="flex-grow flex flex-col w-full h-full"
-            :center="{lat: 21.027815961169388, lng: 105.852286278556}"
-            :zoom="12"
-            :options="{
-                zoomControl: true,
-                mapTypeControl: false,
-                streetViewControl: false,
-                rotateControl: false,
-                fullscreenControl: true,
-                disableDefaultUi: false,
-                clickableIcons: false,
-            }"
-            map-type-id="roadmap"
-            @click="mark"
-        >
-            <GmapMarker
-                :position="{
-                    lat: +form.lat,
-                    lng: +form.long,
+        <div class="h-[300px]">
+            <GmapMap
+                ref="gmapMap"
+                class="flex-grow flex flex-col w-full h-full"
+                :center="{lat: 21.027815961169388, lng: 105.852286278556}"
+                :zoom="12"
+                :options="{
+                    zoomControl: true,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    rotateControl: false,
+                    fullscreenControl: true,
+                    disableDefaultUi: false,
+                    clickableIcons: false,
+                    clickable:true,
                 }"
-                :icon="markerIcon"
-            />
-        </GmapMap>
+                map-type-id="roadmap"
+                @click="mark"
+            >
+                <GmapMarker
+                    :position="{
+                        lat: +form.lat,
+                        lng: +form.lng,
+                    }"
+                    :icon="markerIcon"
+                />
+            </GmapMap>
+        </div>
     </div>
 </template>
 
 <script>
     import _cloneDeep from 'lodash/cloneDeep';
-    import _pick from 'lodash/pick';
+    import {
+        validEmail,
+        phoneValidator,
+    } from '@/utils/form';
 
     const defaultForm = {
         companyName: '',
@@ -62,7 +67,7 @@
         phoneNumber: '',
         email: '',
         lat: 21.027815961169388,
-        long: 105.852286278556,
+        lng: 105.852286278556,
     };
 
     export default {
@@ -73,15 +78,17 @@
         data() {
             return {
                 form: this.contact
-                    ? _cloneDeep(_pick(this.contact, Object.keys(defaultForm)))
+                    ? _cloneDeep(this.contact)
                     : _cloneDeep(defaultForm),
                 rules: {
-                    title: [
-                        { required: true, message: 'Vui lòng nhập tiêu đề', trigger: 'blur' },
-                    ],
-                    image: [
-                        { required: true, message: 'Vui lòng tải ảnh lên', trigger: 'change' },
-                    ],
+                    companyName: [{ required: true, message: 'Vui lòng nhập tên công ty - doanh nghiệp', trigger: 'blur' }],
+                    address: [{ required: true, message: 'Vui lòng nhập địa chỉ', trigger: 'change' }],
+                    email: [{
+                        required: true, validator: validEmail, message: 'Vui lòng nhập đúng định dạng email', trigger: ['change', 'blur'],
+                    }],
+                    phoneNumber: [{
+                        required: true, validator: phoneValidator, message: 'Vui lòng nhập đúng định dạng số điện thoại', trigger: ['change', 'blur'],
+                    }],
                 },
                 markerIcon: {
                     url: '/images/map-pin.png',
@@ -94,7 +101,7 @@
         watch: {
             contact() {
                 this.form = this.contact
-                    ? _cloneDeep(_pick(this.contact, Object.keys(defaultForm)))
+                    ? _cloneDeep(this.contact)
                     : _cloneDeep(defaultForm);
             },
 
@@ -102,6 +109,8 @@
                 handler() {
                     this.$forceUpdate();
                 },
+                deep: true,
+                immediate: true,
             },
         },
 
@@ -109,7 +118,7 @@
             mark(event) {
                 if (!this.disabled) {
                     this.form.lat = event.latLng.lat();
-                    this.form.long = event.latLng.lng();
+                    this.form.lng = event.latLng.lng();
                 }
             },
 

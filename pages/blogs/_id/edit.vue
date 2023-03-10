@@ -55,7 +55,7 @@
                 label: 'Bài viết',
                 link: '/blogs',
             }, {
-                label: 'Thêm bài viết',
+                label: 'Chỉnh sửa bài viết',
                 link: '/blogs/create',
             }]);
         },

@@ -19,8 +19,9 @@
         </a-empty>
         <div v-else class="mt-8 grid grid-cols-1 gap-5">
             <FaqsQuestion
-                v-for="faq in faqs"
+                v-for="(faq, index) in faqs"
                 :key="faq._id"
+                :index="index"
                 :faq="faq"
                 :loading="loading"
                 @open="$refs.FaqsDialog.open(faq)"

@@ -86,13 +86,15 @@
                     icon: 'isax isax-message-question',
                 }, {
                     route: '/contact',
-                    label: 'Liên hệ',
-                    icon: 'isax isax-send-2',
-                }, {
-                    route: '/contact-infor',
                     label: 'Thông tin liên hệ',
-                    icon: 'isax isax-like-dislike',
-                }],
+                    icon: 'isax isax-send-2',
+                },
+                // {
+                //     route: '/contact-infor',
+                //     label: 'Thông tin liên hệ',
+                //     icon: 'isax isax-like-dislike',
+                // }
+                ],
                 isOpen: true,
                 openKeys: [],
                 logoutVisible: false,

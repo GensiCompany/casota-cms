@@ -84,6 +84,10 @@
                 this.visible = false;
             },
 
+            empty() {
+                this.faq = null;
+            },
+
             getContent(content) {
                 this.form.content = content;
             },

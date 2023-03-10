@@ -66,14 +66,15 @@
                             $refs.categoryDialog.open(category)
                         }"
                     >
-                        <i class="isax isax-pen" />
+                        <i class="isax isax-edit" />
                     </a-button>
                     <a-button
                         type="primary"
                         shape="circle"
                         @click="() => {
                             categorySelected = category,
-                            $refs.confirmDelete.open()}"
+                            $refs.confirmDelete.open()
+                        }"
                     >
                         <i class="isax isax-trash" />
                     </a-button>
@@ -87,6 +88,7 @@
             content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
         />
+
         <CategoryDialog ref="categoryDialog" :category="categorySelected" />
     </div>
 </template>
@@ -112,15 +114,12 @@
             },
         },
 
-        // async asyncData({ store, query }) {
-        //     await store.dispatch('posts/categories/fetchAll', query);
-        // },
-
         data() {
             return {
                 categorySelected: null,
             };
         },
+
         computed: {
         },
 
@@ -128,7 +127,7 @@
             async confirmDelete() {
                 try {
                     await this.$api.categories.delete(this.categorySelected._id);
-                    this.$message.success('Xóa thành công');
+                    this.$message.success('Xóa danh mục thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);
