@@ -68,10 +68,18 @@
                     route: '/blogs',
                     label: 'Quản lý Blog',
                     icon: 'isax isax-note',
-                }, {
-                    route: '/categories',
-                    label: 'Danh mục',
-                    icon: 'isax isax-task',
+                    childs: [
+                        {
+                            route: '/blogs',
+                            label: 'Danh sách bài viết',
+                            icon: 'isax isax-note',
+                        },
+                        {
+                            route: '/blogs/categories',
+                            label: 'Danh mục bài viết',
+                            icon: 'isax isax-note',
+                        },
+                    ],
                 }, {
                     route: '/users',
                     label: 'Khách hàng',

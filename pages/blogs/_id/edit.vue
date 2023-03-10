@@ -2,7 +2,7 @@
     <div>
         <div class="card">
             <div class="flex justify-between items-center">
-                <ct-page-header text="Tạo bài viết" />
+                <ct-page-header :text="blog.title || ''" />
                 <div class="flex gap-x-5">
                     <nuxt-link to="/blogs">
                         <a-button>
@@ -14,26 +14,28 @@
                         :loading="loading"
                         @click="$refs.BlogsForm.submit()"
                     >
-                        Xuất bản
+                        Cập nhật
                     </a-button>
                 </div>
             </div>
         </div>
         <div class="card mt-4">
-            <BlogsForm
-                ref="BlogsForm"
-                @submit="submitForm"
-            />
+            <BlogsForm :blog="blog" @submit="submitForm" />
         </div>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import BlogsForm from '@/components/blogs/Form.vue';
 
     export default {
         components: {
             BlogsForm,
+        },
+
+        async fetch() {
+            await this.fetchData();
         },
 
         data() {
@@ -42,12 +44,8 @@
             };
         },
 
-        watch: {
-            '$route.query': {
-                handler() {
-                    this.fetchData();
-                },
-            },
+        computed: {
+            ...mapState('blogs', ['blog']),
         },
 
         mounted() {
@@ -56,16 +54,27 @@
                 link: '/blogs',
             }, {
                 label: 'Chỉnh sửa bài viết',
-                link: '/blogs/create',
+                link: `/blogs/${this.blog._id}`,
             }]);
         },
 
         methods: {
+            async fetchData() {
+                try {
+                    this.loading = true;
+                    await this.$store.dispatch('blogs/fetchDetail', this.$route.params.id);
+                } catch (error) {
+                    this.$handleError(error);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
             async submitForm(payload) {
                 try {
                     this.loading = true;
-                    await this.$api.blogs.create(payload);
-                    this.$message.success('Đăng bài viết thành công');
+                    await this.$api.blogs.update(this.$route.params.id, payload);
+                    this.$message.success('Chỉnh sửa bài viết thành công');
                     this.$router.push('/blogs');
                     this.$nuxt.refresh();
                 } catch (e) {
@@ -78,7 +87,7 @@
 
         head() {
             return {
-                title: 'Thêm mới bài viết',
+                title: 'Chỉnh sửa bài viết',
             };
         },
     };

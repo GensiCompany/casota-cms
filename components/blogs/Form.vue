@@ -98,13 +98,14 @@
         newCategoryId: '',
         category: null,
     };
+
     export default {
-        layout: 'default',
         components: {
             Editor,
         },
+
         props: {
-            post: {
+            blog: {
                 type: Object,
                 default: () => {},
             },
@@ -113,12 +114,13 @@
                 default: false,
             },
         },
+
         data() {
             return {
-                thumbnail: this.post ? this.post.thumbnail : null,
+                thumbnail: this.blog ? this.blog.thumbnail : null,
                 fileName: null,
                 submited: false,
-                form: this.post ? _cloneDeep(this.post) : _cloneDeep(form),
+                form: this.blog ? _cloneDeep(this.blog) : _cloneDeep(form),
                 rules: {
                     title: [
                         { required: true, message: 'Vui lòng nhập Tiêu đề', trigger: 'blur' },
@@ -131,34 +133,40 @@
         },
 
         computed: {
-            ...mapState('posts/categories', ['categories']),
+            ...mapState('blogs/categories', ['categories']),
         },
+
         methods: {
             openSelectFile() {
                 document.querySelector('#thumbnailImage').click();
             },
+
             previewThumbnail() {
                 const imageSelect = document.querySelector('#thumbnailImage').files[0];
                 this.fileName = imageSelect.name;
                 this.thumbnail = URL.createObjectURL(imageSelect);
             },
+
             async handlerThumbnail() {
                 const formData = new FormData();
                 const imageSelected = document.querySelector('#thumbnailImage').files[0];
                 formData.append('image', imageSelected);
-                await this.$axios.post('https://casota.herokuapp.com/api/uploads', formData, {
+                await this.$axios.blog('https://casota.herokuapp.com/api/uploads', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 })
                     .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
                     .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
                     .finally(() => false);
             },
+
             selectCategory(category) {
                 this.form.newCategoryId = category;
             },
+
             getContent(content) {
                 this.form.content = content;
             },
+
             async submit() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
