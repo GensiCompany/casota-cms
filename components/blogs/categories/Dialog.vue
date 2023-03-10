@@ -10,36 +10,31 @@
             layout="vertical"
             :colon="false"
         >
-            <div class="grid grid-cols-10 gap-y-4">
-                <a-form-model-item label="Hình ảnh" prop="image" class="col-span-3">
-                    <div class="flex flex-col items-center gap-y-8 mb-6 w-[100px]">
+            <div class="grid grid-cols-1">
+                <a-form-model-item label="Hình ảnh" prop="image">
+                    <div class="flex flex-col items-center w-full h-[200px] border-[2px] border-dashed border-gray-20 overflow-hidden rounded-md">
                         <img
                             v-if="form.thumbnail"
                             :src="form.thumbnail"
-                            onerror="this.src='/images/default-avatar.png'"
+                            onerror="this.src='/images/default.jpg'"
                             alt=""
-                            class="w-[100px] h-[100px] rounded-md object-cover"
+                            class="w-full h-[200px] rounded-md object-cover"
                         >
-                        <div v-else class="w-[100px] h-[100px] rounded-md border-dashed border border-gray-400 flex justify-center items-center">
-                            <span><i class="fas fa-plus" /></span>
-                        </div>
-                        <input
-                            id="thumbnailImage"
-                            class="!hidden"
-                            type="file"
-                            accept="image/jpeg, image/png"
-                            @change="previewThumbnail"
-                        >
-                        <div class="flex gap-x-2">
-                            <div class="flex items-center w-fit px-2 py-1 rounded-lg border cursor-pointer border-[#0c4ea4] hover:bg-[#0c4ea4] hover:text-[#fff] transition duration-150 ease-out hover:ease-in border-[#d3d3d3]" @click="openSelectFile">
-                                <p class="mb-0 px-3 text-sm text-black">
-                                    {{ _isEmpty(category) ? 'Upload' : 'Thay đổi' }}
-                                </p>
-                            </div>
-                        </div>
+                        <a-empty v-else class="pt-10" :description="false" />
                     </div>
+                    <a-upload
+                        :show-upload-list="false"
+                        action=""
+                        class="mx-auto block text-center"
+                        :transform-file="handlerThumbnail"
+                    >
+                        <div class="flex gap-x-2 mt-4">
+                            <img src="/images/upload.svg" alt="avatar">
+                            {{ _isEmpty(category) ? "Tải lên" : "Thay đổi" }}
+                        </div>
+                    </a-upload>
                 </a-form-model-item>
-                <a-form-model-item label="Tên danh mục" prop="title" class="col-span-7">
+                <a-form-model-item label="Tên danh mục" prop="title">
                     <a-input
                         v-model="form.title"
                         placeholder="Nhập Tên danh mục"
@@ -57,7 +52,7 @@
                 type="primary"
                 @click="submit"
             >
-                {{ _isEmpty(category) ? "Tạo danh mục" : "Thay đổi" }}
+                {{ _isEmpty(category) ? "Tạo mới" : "Cập nhật" }}
             </a-button>
         </div>
     </a-modal>
@@ -65,63 +60,72 @@
 
 <script>
     import _isEmpty from 'lodash/isEmpty';
+    import _cloneDeep from 'lodash/cloneDeep';
+    import {
+        convertToFormData,
+    } from '@/utils/form';
+
+    const defaulForm = {
+        title: '',
+        thumbnail: '',
+    };
 
     export default {
-        components: {
-        },
         props: {
         },
+
         data() {
             return {
-                previewVisible: false,
-                previewImage: '',
-                fileList: [],
                 visible: false,
                 loading: false,
-                room: null,
-                form: {
-                    content: '',
-                    thumbnail: '',
-                    _id: '',
-                },
-                fileName: null,
+                form: null,
                 category: null,
+                thumbnailFile: null,
             };
         },
+
+        watch: {
+            category: {
+                handler() {
+                    this.form = this.category ? _cloneDeep(this.category) : _cloneDeep(defaulForm);
+                },
+                deep: true,
+                immediate: true,
+            },
+        },
+
         methods: {
             _isEmpty,
+            convertToFormData,
+
             open(category) {
                 this.category = category;
-                this.form = {
-                    title: category ? category.title : '',
-                    thumbnail: category ? category.thumbnail : '',
-                };
                 this.visible = true;
             },
 
             close() {
                 this.visible = false;
             },
-            openSelectFile() {
-                document.querySelector('#thumbnailImage').click();
+
+            handlerThumbnail(file) {
+                this.thumbnailFile = file;
+                this.form.thumbnail = URL.createObjectURL(file);
             },
 
-            previewThumbnail() {
-                const imageSelect = document.querySelector('#thumbnailImage').files[0];
-                this.fileName = imageSelect.name;
-                this.form.thumbnail = URL.createObjectURL(imageSelect);
+            async create(form) {
+                try {
+                    await this.$api.blogsCategories.create(form);
+                } catch (error) {
+                    this.$$handleError(error);
+                }
             },
 
-            async handlerThumbnail() {
-                const formData = new FormData();
-                const imageSelected = document.querySelector('#thumbnailImage').files[0];
-                formData.append('image', imageSelected);
-                await this.$axios.post('https://casota.herokuapp.com/api/uploads', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                })
-                    .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
-                    .finally(() => false);
+            async update(form) {
+                try {
+                    await this.$api.blogsCategories.update(form._id, form);
+                } catch (error) {
+                    this.$$handleError(error);
+                }
             },
 
             async submit() {
@@ -129,18 +133,21 @@
                     if (valid) {
                         try {
                             this.loading = true;
-                            if (this.fileName) {
-                                this.handlerThumbnail();
+                            if (this.thumbnailFile) {
+                                const { data: { fileAttributes } } = await this.$api.uploaders.uploadFiles(convertToFormData({
+                                    files: this.thumbnailFile,
+                                }));
+                                this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
                             }
-                            if (!this.form._id) {
-                                await this.$api.postCategories.create(this.form);
-                                this.$message.success('Thêm Danh mục thành công');
+                            if (_isEmpty(this.category)) {
+                                await this.create(this.form);
+                                this.$message.success('Thêm mới danh mục thành công');
                             } else {
-                                await this.$api.postCategories.update(this.category._id, this.form);
-                                this.$message.success('Sửa Danh mục thành công');
+                                await this.update(this.form);
+                                this.$message.success('Chỉnh sửa Danh mục thành công');
                             }
+                            this.$nuxt.refresh();
                             this.close();
-                            await this.$store.dispatch('posts/categories/fetchAll', this.$route.query);
                         } catch (error) {
                             this.$handleError(error);
                         } finally {

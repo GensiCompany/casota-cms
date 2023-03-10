@@ -1,6 +1,9 @@
 <template>
     <div>
-        <div class="card">
+        <div class="card mt-4">
+            <UsersFilters />
+        </div>
+        <div class="card mt-4">
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý khách hàng" />
                 <div class="flex gap-5">
@@ -12,9 +15,9 @@
                     </nuxt-link>
                 </div>
             </div>
-        </div>
-        <div class="card mt-4">
-            <UsersTable :users="users" :loading="loading" :pagination="pagination" />
+            <div class="mt-4">
+                <UsersTable :users="users" :loading="loading" :pagination="pagination" />
+            </div>
         </div>
     </div>
 </template>
@@ -23,10 +26,12 @@
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import UsersTable from '@/components/users/Table.vue';
+    import UsersFilters from '@/components/users/Filters.vue';
 
     export default {
         components: {
             UsersTable,
+            UsersFilters,
         },
 
         async fetch() {
@@ -43,6 +48,13 @@
         },
 
         watch: {
+            '$route.query': {
+                async handler() {
+                    await this.fetchData();
+                },
+                deep: true,
+                immediate: true,
+            },
         },
 
         mounted() {
@@ -58,7 +70,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    await this.$store.dispatch('users/fetchAll');
+                    await this.$store.dispatch('users/fetchAll', this.$route.query);
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

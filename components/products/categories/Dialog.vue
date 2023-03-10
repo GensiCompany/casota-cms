@@ -114,7 +114,7 @@
 
             async create(form) {
                 try {
-                    await this.$api.categories.create(form);
+                    await this.$api.blogsCategories.create(form);
                 } catch (error) {
                     this.$$handleError(error);
                 }
@@ -122,7 +122,7 @@
 
             async update(form) {
                 try {
-                    await this.$api.categories.update(form._id, form);
+                    await this.$api.blogsCategories.update(form._id, form);
                 } catch (error) {
                     this.$$handleError(error);
                 }

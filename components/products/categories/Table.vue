@@ -21,15 +21,17 @@
                 data-index="thumbnail"
             >
                 <template #default="thumbnail">
-                    <img
-                        v-if="thumbnail !== ''"
-                        :src="thumbnail"
-                        alt=""
-                        class="rounded-md w-full h-20 object-cover"
-                    >
-                    <p v-else>
-                        Không có dữ liệu
-                    </p>
+                    <div class="border-[1px] border-solid border-gray-5 rounded-md overflow-hidden">
+                        <img
+                            v-if="thumbnail !== ''"
+                            :src="thumbnail"
+                            alt=""
+                            class="w-full h-20 object-cover"
+                        >
+                        <p v-else>
+                            Không có dữ liệu
+                        </p>
+                    </div>
                 </template>
             </a-table-column>
             <a-table-column
@@ -95,7 +97,7 @@
 
 <script>
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
-    import CategoryDialog from '@/components/categories/Dialog.vue';
+    import CategoryDialog from '@/components/blogs/categories/Dialog.vue';
 
     export default {
         components: {
@@ -126,7 +128,7 @@
         methods: {
             async confirmDelete() {
                 try {
-                    await this.$api.categories.delete(this.categorySelected._id);
+                    await this.$api.blogsCategories.delete(this.categorySelected._id);
                     this.$message.success('Xóa danh mục thành công');
                     this.$nuxt.refresh();
                 } catch (e) {

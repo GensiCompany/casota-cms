@@ -1,5 +1,5 @@
 <template>
-    <div v-if="data.total" class="flex flex-wrap justify-between items-center gap-2">
+    <div v-if="data.total" class="flex flex-wrap justify-between items-center pt-5 gap-2">
         <div class="flex items-center gap-2 order-2 lg:order-1">
             <span>Tổng {{ data.total | numberFormat }}</span>
             <a-select

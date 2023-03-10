@@ -21,8 +21,17 @@
                 data-index="thumbnail"
             >
                 <template #default="thumbnail">
-                    <img v-if="thumbnail !== ''" :src="thumbnail" alt="" class="rounded-md w-full h-20 object-cover">
-                    <p v-else>Không có dữ liệu</p>
+                    <div class="border-[1px] border-solid border-gray-5 rounded-md overflow-hidden">
+                        <img
+                            v-if="thumbnail !== ''"
+                            :src="thumbnail"
+                            alt=""
+                            class="w-full h-20 object-cover"
+                        >
+                        <p v-else>
+                            Không có dữ liệu
+                        </p>
+                    </div>
                 </template>
             </a-table-column>
             <a-table-column
@@ -40,7 +49,7 @@
                 :width="150"
             >
                 <template #default="createdAt">
-                    {{ createdAt | dateFormat('HH:mm dd/MM/yyyy') }}
+                    {{ createdAt | dateFormat('dd/MM/yyyy') }}
                 </template>
             </a-table-column>
             <a-table-column
@@ -59,63 +68,36 @@
                             $refs.categoryDialog.open(category)
                         }"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            width="16"
-                            height="16"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="css-i6dzq1 mx-auto"
-                        ><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
+                        <i class="isax isax-edit" />
                     </a-button>
                     <a-button
                         type="primary"
                         shape="circle"
                         @click="() => {
                             categorySelected = category,
-                            $refs.confirmDelete.open()}"
+                            $refs.confirmDelete.open()
+                        }"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            width="16"
-                            height="16"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            fill="none"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="css-i6dzq1 mx-auto"
-                        ><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line
-                            x1="10"
-                            y1="11"
-                            x2="10"
-                            y2="17"
-                        /><line
-                            x1="14"
-                            y1="11"
-                            x2="14"
-                            y2="17"
-                        /></svg>
+                        <i class="isax isax-trash" />
                     </a-button>
                 </template>
             </a-table-column>
         </a-table>
+
         <ConfirmDialog
             ref="confirmDelete"
             title="Xóa danh mục"
             content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
         />
+
         <CategoryDialog ref="categoryDialog" :category="categorySelected" />
     </div>
 </template>
 
 <script>
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
-    import CategoryDialog from '@/components/posts/categories/Dialog.vue';
+    import CategoryDialog from '@/components/blogs/categories/Dialog.vue';
 
     export default {
         components: {
@@ -132,14 +114,6 @@
                 type: Boolean,
                 default: false,
             },
-            pagination: {
-                type: Object,
-                required: false,
-            },
-        },
-
-        async asyncData({ store, query }) {
-            await store.dispatch('posts/categories/fetchAll', query);
         },
 
         data() {
@@ -147,14 +121,15 @@
                 categorySelected: null,
             };
         },
+
         computed: {
         },
 
         methods: {
             async confirmDelete() {
                 try {
-                    await this.$api.postCategories.delete(this.categorySelected._id);
-                    this.$message.success('Xóa thành công');
+                    await this.$api.blogsCategories.delete(this.categorySelected._id);
+                    this.$message.success('Xóa danh mục thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);

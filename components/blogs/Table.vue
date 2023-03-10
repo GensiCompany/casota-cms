@@ -22,7 +22,17 @@
                 data-index="thumbnail"
             >
                 <template #default="thumbnail">
-                    <img :src="thumbnail" alt="/" class="rounded-md h-16 w-full object-cover">
+                    <div class="border-[1px] border-solid border-gray-5 rounded-md">
+                        <img
+                            v-if="thumbnail !== ''"
+                            :src="thumbnail"
+                            alt=""
+                            class="rounded-md w-full h-20 object-cover"
+                        >
+                        <p v-else>
+                            Không có dữ liệu
+                        </p>
+                    </div>
                 </template>
             </a-table-column>
             <a-table-column

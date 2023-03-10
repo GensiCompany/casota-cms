@@ -11,29 +11,34 @@
                 </div>
             </div>
         </div>
+        <div class="card mt-4">
+            <ProductsTable :products="products" :pagination="pagination" />
+        </div>
     </div>
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
+    import ProductsTable from '@/components/products/Table.vue';
 
     export default {
         components: {
+            ProductsTable,
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
+
         data() {
             return {
                 loading: false,
-                images: [],
             };
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('products', ['products', 'pagination']),
         },
 
         watch: {
@@ -52,7 +57,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('products/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

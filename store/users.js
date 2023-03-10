@@ -14,8 +14,8 @@ export const mutations = {
 };
 
 export const actions = {
-    async fetchAll({ commit }) {
-        const { data: { users, pagination } } = await this.$api.users.getAll();
+    async fetchAll({ commit }, payload) {
+        const { data: { users, pagination } } = await this.$api.users.getAll(payload);
         commit('SET_STATE', { prop: 'users', data: users || [] });
         commit('SET_STATE', { prop: 'pagination', data: pagination });
     },

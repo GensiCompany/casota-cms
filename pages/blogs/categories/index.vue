@@ -29,8 +29,8 @@
 <script>
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    import CategoriesTable from '@/components/categories/Table.vue';
-    import CategoriesDialog from '@/components/categories/Dialog.vue';
+    import CategoriesTable from '@/components/blogs/categories/Table.vue';
+    import CategoriesDialog from '@/components/blogs/categories/Dialog.vue';
 
     export default {
         components: {
@@ -48,7 +48,7 @@
         },
 
         computed: {
-            ...mapState('categories', ['categories']),
+            ...mapState('blogs/categories', ['categories']),
         },
 
         watch: {
@@ -67,7 +67,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    await this.$store.dispatch('categories/fetchAll');
+                    await this.$store.dispatch('blogs/categories/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

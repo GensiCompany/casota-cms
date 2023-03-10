@@ -256,16 +256,15 @@
                 immediate: true,
             },
 
-            // 'form.address.province': {
-            //     handler() {
-            //         if (this.form.address) {
-            //             this.form.address.district.id = undefined;
-            //             this.form.address.ward.id = undefined;
-            //         }
-            //     },
-            //     deep: true,
-            //     immediate: true,
-            // },
+            'form.address.province': {
+                handler() {
+                    if (this.form.address) {
+                        console.log(this.provinces.find((item) => item.id === this.form.address.province.id)?.title);
+                    }
+                },
+                deep: true,
+                immediate: true,
+            },
 
             // 'form.address.district': {
             //     handler() {

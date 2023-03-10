@@ -81,13 +81,15 @@
             <a-table-column
                 key="status"
                 title="Trạng thái"
-                :width="100"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
-                    <a-tag :color="STATUS_COLOR[record.status]">
-                        {{ STATUS_LABEL[record.status] }}
-                    </a-tag>
+                    <div class="w-full text-center">
+                        <a-tag :color="STATUS_COLOR[record.status]" class="mx-auto">
+                            {{ STATUS_LABEL[record.status] }}
+                        </a-tag>
+                    </div>
                 </template>
             </a-table-column>
             <a-table-column

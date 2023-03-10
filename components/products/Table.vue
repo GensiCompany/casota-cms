@@ -1,7 +1,7 @@
 <template>
     <div>
         <a-table
-            :data-source="users"
+            :data-source="products"
             :pagination="false"
             :scroll="{ x: 1200 }"
             :row-key="(row) => row._id"
@@ -17,23 +17,20 @@
             <a-table-column
                 key="thumbnail"
                 title="Ảnh Thumbnail"
-                :width="180"
+                :width="150"
                 align="left"
             >
                 <template #default="record">
-                    <div>
-                        <div class="flex items-center gap-3 mb-1">
-                            <a-avatar
-                                size="large"
-                                :src="record.avatar"
-                                icon="user"
-                                class="flex-shrink-0"
-                            />
-                            <span class="flex flex-col text-start">
-                                <span class="font-semibold">{{ record.fullname || '--' }}</span>
-                                <span>{{ record.email }}</span>
-                            </span>
-                        </div>
+                    <div class="border-[1px] border-solid border-gray-5 rounded-md">
+                        <img
+                            v-if="record.thumbnail !== ''"
+                            :src="record.thumbnail"
+                            alt=""
+                            class="w-full h-20 object-cover"
+                        >
+                        <p v-else>
+                            Không có dữ liệu
+                        </p>
                     </div>
                 </template>
             </a-table-column>
@@ -44,7 +41,9 @@
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.phoneNumber }}</span>
+                    <nuxt-link to="/" class="!text-link-100 !underline hover:!no-underline">
+                        {{ record.title || '--' }}
+                    </nuxt-link>
                 </template>
             </a-table-column>
             <a-table-column
@@ -54,8 +53,7 @@
                 align="center"
             >
                 <template #default="record">
-                    <span v-if="record.address">{{ record.address.province?.name || '--' }}</span>
-                    <span v-else>--</span>
+                    <span>{{ record.shortDescription || '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
@@ -93,30 +91,31 @@
                         </a-button>
                         <a-menu slot="overlay" class="!w-40">
                             <a-menu-item>
-                                <nuxt-link :to="`/users/${record._id}`">
-                                    Xem chi tiết
+                                <nuxt-link :to="`/products/${record._id}`">
+                                    Xem sản phẩm con
                                 </nuxt-link>
                             </a-menu-item>
                             <a-menu-item>
-                                <nuxt-link :to="`/users/${record._id}/edit`">
+                                <nuxt-link :to="`/products/${record._id}/edit`">
                                     Chỉnh sửa
                                 </nuxt-link>
                             </a-menu-item>
                             <a-menu-item
                                 class="!text-danger-100"
+                                :disabled="!record.isDeleted"
                                 @click="() => {
-                                    userSelected = record,
+                                    productselected = record,
                                     $refs.ConfirmDialog.open();
                                 }"
                             >
-                                Xóa
+                                {{ !record.isDeleted ? "Không thể xóa" : "Xóa" }}
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
                 </template>
             </a-table-column>
         </a-table>
-        <Pagination class="mt-5" :data="pagination" />
+        <Pagination :data="pagination" />
         <ConfirmDialog
             ref="ConfirmDialog"
             title="Xóa người dùng"
@@ -145,7 +144,7 @@
             ConfirmDialog,
         },
         props: {
-            users: {
+            products: {
                 type: Array,
                 default: () => [],
             },
@@ -163,7 +162,7 @@
             return {
                 USER_GENDER_OPTIONS,
                 USER_STATUS_OPTIONS,
-                userSelected: null,
+                productselected: null,
             };
         },
 
@@ -184,7 +183,7 @@
 
             async confirmDelete() {
                 try {
-                    await this.$api.users.delete(this.userSelected._id);
+                    await this.$api.products.delete(this.productselected._id);
                     this.$message.success('Xóa người dùng thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
