@@ -123,7 +123,7 @@
         >
             <div class="text-center">
                 <p class="text-lg">
-                    Bạn chắc chắn xóa người dùng này chứ?
+                    Bạn chắc chắn xóa sản phẩm này chứ?
                 </p>
                 <span class="block"><span class="font-semibold">Lưu ý</span>: hành động sẽ không thể hoàn tác</span>
             </div>
@@ -184,7 +184,7 @@
             async confirmDelete() {
                 try {
                     await this.$api.products.delete(this.productselected._id);
-                    this.$message.success('Xóa người dùng thành công');
+                    this.$message.success('Xóa sản phẩm thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);

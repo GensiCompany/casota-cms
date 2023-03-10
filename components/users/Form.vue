@@ -259,22 +259,32 @@
             'form.address.province': {
                 handler() {
                     if (this.form.address) {
-                        console.log(this.provinces.find((item) => item.id === this.form.address.province.id)?.title);
+                        this.form.address.province.name = this.provinces.find((item) => item.id === this.form.address.province.id)?.title;
                     }
                 },
                 deep: true,
                 immediate: true,
             },
 
-            // 'form.address.district': {
-            //     handler() {
-            //         if (this.form.address) {
-            //             this.form.address.ward.id = undefined;
-            //         }
-            //     },
-            //     deep: true,
-            //     immediate: true,
-            // },
+            'form.address.district': {
+                handler() {
+                    if (this.form.address) {
+                        this.form.address.district.name = this.districts.find((item) => item.id === this.form.address.district.id)?.title;
+                    }
+                },
+                deep: true,
+                immediate: true,
+            },
+
+            'form.address.ward': {
+                handler() {
+                    if (this.form.address) {
+                        this.form.address.ward.name = this.wards.find((item) => item.id === this.form.address.ward.id)?.title;
+                    }
+                },
+                deep: true,
+                immediate: true,
+            },
         },
 
         methods: {
@@ -293,18 +303,7 @@
                         this.$emit('submit', {
                             ...this.form,
                             address: {
-                                province: {
-                                    id: this.form.address.province.id,
-                                    name: this.provinces.find((item) => item.id === this.form.address.province.id)?.title,
-                                },
-                                district: {
-                                    id: this.form.address.district.id,
-                                    name: this.districts.find((item) => item.id === this.form.address.district.id)?.title,
-                                },
-                                ward: {
-                                    id: this.form.address.ward.id,
-                                    name: this.wards.find((item) => item.id === this.form.address.ward.id)?.title,
-                                },
+                                ...this.form.address,
                                 addressDetail: this.form.address.addressDetail,
                             },
                         });

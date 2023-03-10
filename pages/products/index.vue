@@ -4,10 +4,12 @@
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý sản phẩm" />
                 <div class="flex gap-5">
-                    <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                        <i class="fas fa-plus mr-2" />
-                        Thêm mới
-                    </a-button>
+                    <nuxt-link to="/products/create">
+                        <a-button type="primary" class="!bg-prim-100 !border-prim-100">
+                            <i class="fas fa-plus mr-2" />
+                            Thêm mới
+                        </a-button>
+                    </nuxt-link>
                 </div>
             </div>
         </div>

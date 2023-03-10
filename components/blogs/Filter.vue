@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import { STATUS_OPTIONS } from '@/constants/businessAreas/status';
+    import { STATUS_OPTIONS } from '@/constants/blogs/status';
     import SearchFilter from '@/components/filters/Search.vue';
     import SelectFilter from '@/components/filters/Select.vue';
 

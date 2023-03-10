@@ -2,33 +2,40 @@
     <div>
         <div class="card">
             <div class="flex justify-between items-center">
-                <ct-page-header show-back text="Thêm mới sản phẩm" />
+                <ct-page-header show-back :text="`Sản phẩm: ${product.title || ''}`" />
                 <div class="flex gap-x-5">
-                    <a-button
-                        type="primary"
-                        :loading="loading"
-                        @click="$refs.ProductsForm.submit()"
-                    >
-                        Xuất bản
-                    </a-button>
+                    <nuxt-link :to="`/products/${product._id}/edit`">
+                        <a-button
+                            type="primary"
+                            :loading="loading"
+                        >
+                            Chỉnh sửa
+                        </a-button>
+                    </nuxt-link>
                 </div>
             </div>
         </div>
         <div class="card mt-4">
             <ProductsForm
                 ref="ProductsForm"
-                @submit="submitForm"
+                :product="product"
+                :is-edit="true"
             />
         </div>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import ProductsForm from '@/components/products/Form.vue';
 
     export default {
         components: {
             ProductsForm,
+        },
+
+        async fetch() {
+            await this.fetchData();
         },
 
         data() {
@@ -37,26 +44,27 @@
             };
         },
 
+        computed: {
+            ...mapState('products', ['product']),
+        },
+
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
                 label: 'Sản phẩm',
                 link: '/products',
             }, {
-                label: 'Thêm mới sản phẩm',
-                link: '/products/create',
+                label: 'Chi tiết sản phẩm',
+                link: `/products/${this.product._id}`,
             }]);
         },
 
         methods: {
-            async submitForm(payload) {
+            async fetchData() {
                 try {
                     this.loading = true;
-                    await this.$api.products.create(payload);
-                    this.$message.success('Đăng sản phẩm mới thành công');
-                    this.$router.push('/products');
-                    this.$nuxt.refresh();
-                } catch (e) {
-                    this.$handleError(e);
+                    await this.$store.dispatch('products/fetchDetail', this.$route.params.id);
+                } catch (error) {
+                    this.$handleError(error);
                 } finally {
                     this.loading = false;
                 }
@@ -65,7 +73,7 @@
 
         head() {
             return {
-                title: 'Thêm mới sản phẩm',
+                title: 'Chi tiết sản phẩm',
             };
         },
     };

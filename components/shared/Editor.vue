@@ -1,9 +1,9 @@
 <template>
     <div id="editor-post" class="light-mode-editor">
         <p class="text-black mt-5">
-            Nội dung bài viết<span style="color:red">*</span>
+            {{ label }}<span class="text-[red] ml-1">(*)</span>
         </p>
-        <vue-editor v-model="content" @text-change="saveContent" :isEdit="isEdit"/>
+        <vue-editor v-model="content" :disabled="isEdit" @text-change="saveContent" />
     </div>
 </template>
 
@@ -23,14 +23,23 @@
                 type: Boolean,
                 default: false,
             },
+            label: {
+                type: String,
+                default: 'Nội dung bài viết',
+            },
         },
         data() {
             return {
-                content: this.contentProps || '',
+                content: '',
             };
         },
-        computed: {
+
+        watch: {
+            contentProps() {
+                this.content = this.contentProps;
+            },
         },
+
         methods: {
             saveContent() {
                 this.$emit('getContent', this.content);
