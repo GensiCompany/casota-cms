@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="card mt-4">
-            <ProductsTable :products="products" :pagination="pagination" />
+            <ProductsTable :products="products" :pagination="pagination" :loading="loading" />
         </div>
     </div>
 </template>

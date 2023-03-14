@@ -133,7 +133,7 @@
         },
 
         computed: {
-            ...mapState('blogs/categories', ['categories']),
+            ...mapState('categories', ['categories']),
         },
 
         methods: {

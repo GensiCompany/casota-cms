@@ -14,12 +14,12 @@ export const mutations = {
 
 export const actions = {
     async fetchAll({ commit }) {
-        const { data: { categories } } = await this.$api.blogsCategories.getAll();
+        const { data: { categories } } = await this.$api.categories.getAll();
         commit('SET_STATE', { prop: 'categories', data: categories });
     },
 
     async fetchDetail({ commit }, payload) {
-        const { data: { category } } = await this.$api.blogsCategories.getDetail(payload);
+        const { data: { category } } = await this.$api.categories.getDetail(payload);
         commit('SET_STATE', { prop: 'category', data: category });
     },
 };

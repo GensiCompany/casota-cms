@@ -48,7 +48,7 @@
         },
 
         computed: {
-            ...mapState('blogs/categories', ['categories']),
+            ...mapState('categories', ['categories']),
         },
 
         watch: {
@@ -67,7 +67,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    await this.$store.dispatch('blogs/categories/fetchAll');
+                    await this.$store.dispatch('categories/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

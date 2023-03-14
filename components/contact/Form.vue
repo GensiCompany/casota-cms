@@ -77,9 +77,7 @@
 
         data() {
             return {
-                form: this.contact
-                    ? _cloneDeep(this.contact)
-                    : _cloneDeep(defaultForm),
+                form: this.contact ? _cloneDeep(this.contact) : _cloneDeep(defaultForm),
                 rules: {
                     companyName: [{ required: true, message: 'Vui lòng nhập tên công ty - doanh nghiệp', trigger: 'blur' }],
                     address: [{ required: true, message: 'Vui lòng nhập địa chỉ', trigger: 'change' }],
@@ -100,9 +98,7 @@
 
         watch: {
             contact() {
-                this.form = this.contact
-                    ? _cloneDeep(this.contact)
-                    : _cloneDeep(defaultForm);
+                this.form = this.contact ? _cloneDeep(this.contact) : _cloneDeep(defaultForm);
             },
 
             'form.lat': {

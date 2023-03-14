@@ -18,7 +18,7 @@
                 key="thumbnail"
                 title="Ảnh Thumbnail"
                 :width="150"
-                align="left"
+                align="center"
             >
                 <template #default="record">
                     <div class="border-[1px] border-solid border-gray-5 rounded-md">

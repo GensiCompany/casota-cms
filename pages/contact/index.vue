@@ -13,13 +13,13 @@
         </div>
 
         <div class="card flex-grow mt-4">
-            <ContactForm ref="contactForm" :contact="contacts" @submit="updateContact" />
+            <ContactForm ref="contactForm" :contact="setting" @submit="updateContact" />
         </div>
     </div>
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import ContactForm from '@/components/contact/Form.vue';
 
@@ -29,7 +29,7 @@
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
 
         data() {
@@ -40,7 +40,7 @@
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('settings', ['setting']),
         },
 
         watch: {
@@ -59,15 +59,24 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('settings/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
                     this.loading = false;
                 }
             },
-            updateContact() {
-                console.log(1);
+
+            async updateContact(form) {
+                try {
+                    this.loading = true;
+                    await this.$store.dispatch('settings/update', form);
+                    this.$nuxt.refresh();
+                } catch (error) {
+                    this.$handleError(error);
+                } finally {
+                    this.loading = false;
+                }
             },
         },
 
