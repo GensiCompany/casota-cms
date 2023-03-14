@@ -3,7 +3,7 @@
         <a-table
             :data-source="products"
             :pagination="false"
-            :scroll="{ x: 1200 }"
+            :scroll="{ x: 1000 }"
             :row-key="(row) => row._id"
             :loading="loading"
         >
@@ -41,7 +41,7 @@
                 align="center"
             >
                 <template #default="record">
-                    <nuxt-link to="/" class="!text-link-100 !underline hover:!no-underline">
+                    <nuxt-link :to="`/products/${record._id}/variants`" class="!text-link-100 !underline hover:!no-underline">
                         {{ record.title || '--' }}
                     </nuxt-link>
                 </template>
@@ -91,7 +91,7 @@
                         </a-button>
                         <a-menu slot="overlay" class="!w-40">
                             <a-menu-item>
-                                <nuxt-link :to="`/products/${record._id}`">
+                                <nuxt-link :to="`/products/${record._id}/variants`">
                                     Xem sản phẩm con
                                 </nuxt-link>
                             </a-menu-item>

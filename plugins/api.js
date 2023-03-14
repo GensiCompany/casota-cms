@@ -6,6 +6,7 @@ import Blogs from '@/api/blogs';
 import Categories from '@/api/categories';
 import Faqs from '@/api/faqs';
 import Products from '@/api/products';
+import ProductVariants from '@/api/products/variants';
 import Settings from '@/api/settings';
 
 export default (context, inject) => {
@@ -19,6 +20,7 @@ export default (context, inject) => {
         faqs: Faqs(context.$axios),
         uploaders: Uploaders(context.$axios),
         products: Products(context.$axios),
+        productVariants: ProductVariants(context.$axios),
         settings: Settings(context.$axios),
     };
 
