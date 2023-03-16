@@ -149,6 +149,10 @@
                 this.visible = false;
             },
 
+            empty() {
+                this.form = _cloneDeep(defaulForm);
+            },
+
             handlerThumbnail(file) {
                 this.thumbnailFile = file;
                 this.form.thumbnail = URL.createObjectURL(file);
@@ -189,6 +193,7 @@
                                 this.$message.success('Chỉnh sửa sản phẩm thành công');
                             }
                             this.$nuxt.refresh();
+                            this.empty();
                             this.close();
                         } catch (error) {
                             this.$handleError(error);

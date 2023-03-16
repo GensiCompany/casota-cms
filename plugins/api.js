@@ -8,6 +8,7 @@ import Faqs from '@/api/faqs';
 import Products from '@/api/products';
 import ProductVariants from '@/api/products/variants';
 import Settings from '@/api/settings';
+import Orders from '@/api/orders';
 
 export default (context, inject) => {
     // Initialize API factories
@@ -22,6 +23,7 @@ export default (context, inject) => {
         products: Products(context.$axios),
         productVariants: ProductVariants(context.$axios),
         settings: Settings(context.$axios),
+        orders: Orders(context.$axios),
     };
 
     // Inject $api

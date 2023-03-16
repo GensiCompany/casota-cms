@@ -53,7 +53,7 @@
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.shortDescription || '--' }}</span>
+                    <span class="line-clamp-2">{{ record.shortDescription || '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
@@ -108,7 +108,7 @@
                                     $refs.ConfirmDialog.open();
                                 }"
                             >
-                                {{ !record.isDeleted ? "Không thể xóa" : "Xóa" }}
+                                {{ record.isDeleted ? "Không thể xóa" : "Xóa" }}
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>

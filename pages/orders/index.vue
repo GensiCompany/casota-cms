@@ -4,10 +4,12 @@
             <div class="flex justify-between items-center">
                 <ct-page-header text="Quản lý đơn hàng" />
                 <div class="flex gap-5">
-                    <a-button type="primary" class="!bg-prim-100 !border-prim-100">
-                        <i class="fas fa-plus mr-2" />
-                        Thêm mới
-                    </a-button>
+                    <nuxt-link to="/orders/create">
+                        <a-button type="primary" class="!bg-prim-100 !border-prim-100">
+                            <i class="fas fa-plus mr-2" />
+                            Thêm mới
+                        </a-button>
+                    </nuxt-link>
                 </div>
             </div>
         </div>
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-    // import { mapState } from 'vuex';
+    import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import OrdersTable from '@/components/orders/Table.vue';
 
@@ -32,8 +34,9 @@
         },
 
         async fetch() {
-            // await this.fetchData();
+            await this.fetchData();
         },
+
         data() {
             return {
                 loading: false,
@@ -42,7 +45,7 @@
         },
 
         computed: {
-            // ...mapState('images', ['images', 'pagination']),
+            ...mapState('orders', ['orders', 'pagination']),
         },
 
         watch: {
@@ -61,7 +64,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('images/fetchAll');
+                    await this.$store.dispatch('orders/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

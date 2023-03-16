@@ -3,7 +3,7 @@
         <a-table
             :data-source="orders"
             :pagination="false"
-            :scroll="{ x: 1200 }"
+            :scroll="{ x: 1250 }"
             :row-key="(row) => row._id"
             :loading="loading"
         >
@@ -15,73 +15,75 @@
                 :custom-render="(text, record, index) => index + 1"
             />
             <a-table-column
-                key="codeOrder"
-                title="Mã đơn hàng"
-                :width="100"
+                key="shippingName"
+                title="Người nhận"
+                :width="180"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.title }}</span>
+                    <span>{{ record.shippingInfo ? record.shippingInfo.shippingName : '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
-                key="order"
-                title="Người đặt hàng"
-                :width="100"
+                key="shippingPhone"
+                title="Điện thoại"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.email }}</span>
+                    <span>{{ record.shippingInfo ? record.shippingInfo.shippingPhone : '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
-                key="products"
-                title="Sản phẩm"
-                :width="100"
+                key="shippingAddress"
+                title="Địa chỉ"
+                :width="200"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.email }}</span>
+                    <span>{{ record.shippingInfo ? record.shippingInfo.shippingAddress : '--' }}</span>
+                </template>
+            </a-table-column>
+            <a-table-column
+                key="shippingFee"
+                title="Phí Ship"
+                :width="120"
+                align="center"
+            >
+                <template #default="record">
+                    <span>{{ record.shippingFee | currencyFormat }}</span>
                 </template>
             </a-table-column>
             <a-table-column
                 key="totalPrice"
                 title="Tổng tiền"
-                :width="100"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.email }}</span>
+                    <span>{{ record.totalPrice | currencyFormat }}</span>
                 </template>
             </a-table-column>
             <a-table-column
-                key="note"
-                title="Ghi chú"
-                :width="100"
+                key="finalPrice"
+                title="Thanh toán"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.email }}</span>
-                </template>
-            </a-table-column>
-            <a-table-column
-                key="createAt"
-                title="Ngày tạo"
-                :width="100"
-                align="center"
-            >
-                <template #default="record">
-                    <span>{{ record.email }}</span>
+                    <span>{{ record.finalPrice | currencyFormat }}</span>
                 </template>
             </a-table-column>
             <a-table-column
                 key="status"
                 title="Trạng thái"
-                :width="150"
+                :width="120"
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.status }}</span>
+                    <a-tag :color="STATUS_COLOR[record.status]">
+                        {{ STATUS_LABEL[record.status] }}
+                    </a-tag>
                 </template>
             </a-table-column>
             <a-table-column
@@ -91,25 +93,41 @@
                 :width="100"
             >
                 <template #default="record">
-                    <a-button
-                        type="primary"
-                        shape="circle"
-                    >
-                        <i class="isax isax-pen" />
-                        <span class="hidden">{{ record }}</span>
-                    </a-button>
-                    <a-button
-                        type="primary"
-                        shape="circle"
-                    >
-                        <i class="isax isax-trash" />
-                    </a-button>
+                    <a-dropdown placement="bottomRight" :trigger="['click']">
+                        <a-button class="!mr-0" size="small">
+                            <i class="fas fa-ellipsis-h" />
+                        </a-button>
+                        <a-menu slot="overlay" class="!w-40">
+                            <a-menu-item>
+                                <nuxt-link :to="`/orders/${record._id}`">
+                                    Xem chi tiết
+                                </nuxt-link>
+                            </a-menu-item>
+                            <a-menu-item>
+                                <nuxt-link :to="`/orders/${record._id}/edit`">
+                                    Chỉnh sửa
+                                </nuxt-link>
+                            </a-menu-item>
+                            <a-menu-item
+                                class="!text-danger-100"
+                                :disabled="record.status !== STATUS.DRAFT"
+                                @click="() => {
+                                    categorySelected = record,
+                                    $refs.ConfirmDialog.open();
+                                }"
+                            >
+                                {{ record.status === STATUS.DRAFT ? "Xóa" : "Không thể xóa" }}
+                            </a-menu-item>
+                        </a-menu>
+                    </a-dropdown>
                 </template>
             </a-table-column>
         </a-table>
-        <Pagination class="mt-5" :data="pagination" />
+
+        <Pagination :data="pagination" />
+
         <ConfirmDialog
-            ref="confirmDelete"
+            ref="ConfirmDialog"
             title="Xóa danh mục"
             content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
@@ -118,8 +136,10 @@
 </template>
 
 <script>
-    import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
     import Pagination from '@/components/shared/Pagination.vue';
+    import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
+    import { STATUS_OPTIONS, STATUS } from '@/constants/orders/status';
+    import { mapDataFromOptions } from '@/utils/data';
 
     export default {
         components: {
@@ -143,16 +163,29 @@
 
         data() {
             return {
+                STATUS,
+                STATUS_OPTIONS,
                 categorySelected: null,
             };
         },
+
         computed: {
+            STATUS_LABEL() {
+                return this.mapDataFromOptions(STATUS_OPTIONS, 'value', 'label');
+            },
+
+            STATUS_COLOR() {
+                return this.mapDataFromOptions(STATUS_OPTIONS, 'value', 'color');
+            },
         },
+
         methods: {
+            mapDataFromOptions,
+
             async confirmDelete() {
                 try {
-                    await this.$api.postCategories.delete(this.categorySelected._id);
-                    this.$message.success('Xóa thành công');
+                    await this.$api.orders.delete(this.categorySelected._id);
+                    this.$message.success('Xóa đơn hàng thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);

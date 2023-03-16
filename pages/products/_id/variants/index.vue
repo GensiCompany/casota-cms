@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center">
                 <ct-page-header text="Danh sách sản phẩm con" />
                 <div class="flex gap-5">
-                    <nuxt-link :to="`/products/${product._id}`">
+                    <nuxt-link :to="`/products`">
                         <a-button type="default">
                             Quay lại
                         </a-button>

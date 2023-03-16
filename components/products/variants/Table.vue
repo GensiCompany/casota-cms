@@ -107,7 +107,7 @@
                                     $refs.ConfirmDialog.open();
                                 }"
                             >
-                                {{ !record.isDeleted ? "Không thể xóa" : "Xóa" }}
+                                {{ record.isDeleted ? "Không thể xóa" : "Xóa" }}
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
