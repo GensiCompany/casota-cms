@@ -116,7 +116,7 @@
             },
 
             empty() {
-                this.category = _cloneDeep(defaulForm);
+                this.category = null;
             },
 
             async create(form) {
@@ -153,8 +153,8 @@
                                 await this.update({ ...this.form, type: TYPE.BLOG });
                                 this.$message.success('Chỉnh sửa Danh mục thành công');
                             }
-                            this.$nuxt.refresh();
                             this.empty();
+                            this.$nuxt.refresh();
                             this.close();
                         } catch (error) {
                             this.$handleError(error);

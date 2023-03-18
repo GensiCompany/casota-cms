@@ -21,36 +21,12 @@
                 <a-form-model-item label="Địa chỉ" prop="address">
                     <a-input v-model="form.address" placeholder="Địa chỉ" />
                 </a-form-model-item>
+                <a-form-model-item label="Nhúng bản đồ" prop="iframe">
+                    <a-textarea v-model="form.iframe" :auto-size="{ minRows: 3, maxRows: 4 }" placeholder="Nhúng iframe vào đây" />
+                </a-form-model-item>
             </div>
         </a-form-model>
-        <div class="h-[300px]">
-            <GmapMap
-                ref="gmapMap"
-                class="flex-grow flex flex-col w-full h-full"
-                :center="{lat: 21.027815961169388, lng: 105.852286278556}"
-                :zoom="12"
-                :options="{
-                    zoomControl: true,
-                    mapTypeControl: false,
-                    streetViewControl: false,
-                    rotateControl: false,
-                    fullscreenControl: true,
-                    disableDefaultUi: false,
-                    clickableIcons: false,
-                    clickable:true,
-                }"
-                map-type-id="roadmap"
-                @click="mark"
-            >
-                <GmapMarker
-                    :position="{
-                        lat: +form.lat,
-                        lng: +form.lng,
-                    }"
-                    :icon="markerIcon"
-                />
-            </GmapMap>
-        </div>
+        <div class="h-[300px]" v-html="form.iframe" />
     </div>
 </template>
 
@@ -66,8 +42,7 @@
         address: '',
         phoneNumber: '',
         email: '',
-        lat: 21.027815961169388,
-        lng: 105.852286278556,
+        iframe: '',
     };
 
     export default {
@@ -88,36 +63,19 @@
                         required: true, validator: phoneValidator, message: 'Vui lòng nhập đúng định dạng số điện thoại', trigger: ['change', 'blur'],
                     }],
                 },
-                markerIcon: {
-                    url: '/images/map-pin.png',
-                    scaledSize: { width: 45, height: 45 },
-                    labelOrigin: { x: 25, y: -25 },
-                },
             };
         },
 
         watch: {
             contact() {
                 this.form = this.contact ? _cloneDeep(this.contact) : _cloneDeep(defaultForm);
-            },
-
-            'form.lat': {
-                handler() {
-                    this.$forceUpdate();
-                },
-                deep: true,
-                immediate: true,
+                if (this.contact && !this.contact.iframe) {
+                    this.form.iframe = '';
+                }
             },
         },
 
         methods: {
-            mark(event) {
-                if (!this.disabled) {
-                    this.form.lat = event.latLng.lat();
-                    this.form.lng = event.latLng.lng();
-                }
-            },
-
             submit() {
                 this.$refs.form.validate((valid) => {
                     if (valid) {

@@ -69,6 +69,7 @@
     const defaulForm = {
         title: '',
         thumbnail: '',
+        type: TYPE.PRODUCT,
     };
 
     export default {
@@ -111,7 +112,7 @@
             },
 
             empty() {
-                this.category = _cloneDeep(defaulForm);
+                this.category = null;
             },
 
             handlerThumbnail(file) {
@@ -129,7 +130,7 @@
 
             async update(form) {
                 try {
-                    await this.$api.categories.update(form._id, form);
+                    await this.$api.categories.update(form._id, { ...form });
                 } catch (error) {
                     this.$handleError(error);
                 }
@@ -146,15 +147,15 @@
                                 }));
                                 this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
                             }
-                            if (_isEmpty(this.category)) {
+                            if (!this.category) {
                                 await this.create({ ...this.form, type: TYPE.PRODUCT });
                                 this.$message.success('Thêm mới danh mục thành công');
                             } else {
                                 await this.update({ ...this.form, type: TYPE.PRODUCT });
                                 this.$message.success('Chỉnh sửa Danh mục thành công');
                             }
-                            this.$nuxt.refresh();
                             this.empty();
+                            this.$nuxt.refresh();
                             this.close();
                         } catch (error) {
                             this.$handleError(error);

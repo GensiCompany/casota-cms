@@ -99,7 +99,7 @@
 
 <script>
     import ConfirmDialog from '@/components/shared/ConfirmDialog.vue';
-    import CategoryDialog from '@/components/blogs/categories/Dialog.vue';
+    import CategoryDialog from '@/components/products/categories/Dialog.vue';
 
     export default {
         components: {

@@ -7,7 +7,7 @@
                     <a-button
                         type="primary"
                         class="!bg-prim-100 !border-prim-100"
-                        @click="$refs.CategoriesDialog.open()"
+                        @click="$refs.BlogsCategoriesDialog.open()"
                     >
                         <i class="fas fa-plus mr-2" />
                         Thêm mới
@@ -22,7 +22,7 @@
             />
         </div>
 
-        <CategoriesDialog ref="CategoriesDialog" />
+        <BlogsCategoriesDialog id="BlogsCategoriesDialog" ref="BlogsCategoriesDialog" />
     </div>
 </template>
 
@@ -30,12 +30,12 @@
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import CategoriesTable from '@/components/blogs/categories/Table.vue';
-    import CategoriesDialog from '@/components/blogs/categories/Dialog.vue';
+    import BlogsCategoriesDialog from '@/components/blogs/categories/Dialog.vue';
     import { TYPE_OPTIONS, TYPE } from '@/constants/categories/type';
 
     export default {
         components: {
-            CategoriesDialog,
+            BlogsCategoriesDialog,
             CategoriesTable,
         },
 

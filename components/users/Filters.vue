@@ -3,6 +3,7 @@
         <SearchFilter
             label="Tên khách hàng"
             placeholder="Tên khách hàng"
+            query="freeWord"
         />
         <SearchFilter
             label="Email khách hàng"
@@ -12,7 +13,7 @@
         <SearchFilter
             label="Số điện thoại"
             placeholder="Nhập số điện thoại"
-            query="email"
+            query="phoneNumber"
         />
         <SelectFilter
             label="Giới tính"
