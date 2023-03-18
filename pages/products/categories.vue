@@ -29,8 +29,9 @@
 <script>
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    import CategoriesTable from '@/components/blogs/categories/Table.vue';
-    import CategoriesDialog from '@/components/blogs/categories/Dialog.vue';
+    import CategoriesTable from '@/components/products/categories/Table.vue';
+    import CategoriesDialog from '@/components/products/categories/Dialog.vue';
+    import { TYPE_OPTIONS, TYPE } from '@/constants/categories/type';
 
     export default {
         components: {
@@ -43,6 +44,8 @@
         },
         data() {
             return {
+                TYPE,
+                TYPE_OPTIONS,
                 loading: false,
             };
         },
@@ -67,7 +70,7 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    await this.$store.dispatch('categories/fetchAll');
+                    await this.$store.dispatch('categories/fetchAll', { type: TYPE.PRODUCT });
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

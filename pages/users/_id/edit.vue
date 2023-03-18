@@ -51,21 +51,25 @@
 
         computed: {
             ...mapState('users', ['user']),
-        },
-
-        watch: {
-        },
-
-        mounted() {
-            this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [
-                {
+            breadcrumbs() {
+                return [{
                     label: 'Quản lý khách hàng',
                     link: '/users',
                 }, {
                     label: 'Chi tiết khách hàng',
                     link: `/users/${this.user._id}`,
-                },
-            ]);
+                }];
+            },
+        },
+
+        watch: {
+            user() {
+                this.$store.commit('breadcrumbs/SET_BREADCRUMBS', this.breadcrumbs);
+            },
+        },
+
+        destroyed() {
+            this.$store.commit('users/SET_STATE', { prop: 'user', data: {} });
         },
 
         methods: {

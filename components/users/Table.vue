@@ -17,7 +17,7 @@
             <a-table-column
                 key="fullName"
                 title="Họ và tên"
-                :width="180"
+                :width="200"
                 align="left"
             >
                 <template #default="record">
@@ -50,7 +50,7 @@
             <a-table-column
                 key="phoneNumber"
                 title="Số điện thoại"
-                :width="120"
+                :width="100"
                 align="center"
             >
                 <template #default="record">
@@ -138,7 +138,7 @@
                 </template>
             </a-table-column>
         </a-table>
-        <Pagination class="mt-5" :data="pagination" />
+        <Pagination :data="pagination" />
         <ConfirmDialog
             ref="ConfirmDialog"
             title="Xóa người dùng"

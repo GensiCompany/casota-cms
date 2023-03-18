@@ -20,10 +20,7 @@
             </div>
         </div>
         <div class="card mt-4">
-            <BlogsForm
-                ref="BlogsForm"
-                @submit="submitForm"
-            />
+            <BlogsForm ref="BlogsForm" @submit="submitForm" />
         </div>
     </div>
 </template>

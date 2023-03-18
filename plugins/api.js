@@ -9,6 +9,7 @@ import Products from '@/api/products';
 import ProductVariants from '@/api/products/variants';
 import Settings from '@/api/settings';
 import Orders from '@/api/orders';
+import Feedbacks from '@/api/feedbacks';
 
 export default (context, inject) => {
     // Initialize API factories
@@ -24,6 +25,7 @@ export default (context, inject) => {
         productVariants: ProductVariants(context.$axios),
         settings: Settings(context.$axios),
         orders: Orders(context.$axios),
+        feedbacks: Feedbacks(context.$axios),
     };
 
     // Inject $api

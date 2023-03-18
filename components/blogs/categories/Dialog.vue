@@ -64,6 +64,7 @@
     import {
         convertToFormData,
     } from '@/utils/form';
+    import { TYPE_OPTIONS, TYPE } from '@/constants/categories/type';
 
     const defaulForm = {
         title: '',
@@ -76,6 +77,8 @@
 
         data() {
             return {
+                TYPE,
+                TYPE_OPTIONS,
                 visible: false,
                 loading: false,
                 form: null,
@@ -112,9 +115,13 @@
                 this.form.thumbnail = URL.createObjectURL(file);
             },
 
+            empty() {
+                this.category = _cloneDeep(defaulForm);
+            },
+
             async create(form) {
                 try {
-                    await this.$api.blogsCategories.create(form);
+                    await this.$api.categories.create(form);
                 } catch (error) {
                     this.$$handleError(error);
                 }
@@ -122,7 +129,7 @@
 
             async update(form) {
                 try {
-                    await this.$api.blogsCategories.update(form._id, form);
+                    await this.$api.categories.update(form._id, form);
                 } catch (error) {
                     this.$$handleError(error);
                 }
@@ -140,13 +147,14 @@
                                 this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
                             }
                             if (_isEmpty(this.category)) {
-                                await this.create(this.form);
+                                await this.create({ ...this.form, type: TYPE.BLOG });
                                 this.$message.success('Thêm mới danh mục thành công');
                             } else {
-                                await this.update(this.form);
+                                await this.update({ ...this.form, type: TYPE.BLOG });
                                 this.$message.success('Chỉnh sửa Danh mục thành công');
                             }
                             this.$nuxt.refresh();
+                            this.empty();
                             this.close();
                         } catch (error) {
                             this.$handleError(error);

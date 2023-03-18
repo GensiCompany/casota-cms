@@ -41,43 +41,47 @@
                             2. Hình ảnh đại diện
                         </p>
                         <div class="flex flex-col items-center gap-y-8 mb-6 w-full">
-                            <img
-                                v-if="thumbnail"
-                                :src="thumbnail"
-                                onerror="this.src='/images/default-avatar.png'"
-                                alt=""
-                                class="w-full h-[200px] rounded-md object-cover"
-                            >
-                            <div v-else class="w-full h-[200px] rounded-md border-dashed border border-gray-400 flex justify-center items-center">
-                                <span><i class="fas fa-plus" /></span>
+                            <div class="flex flex-col items-center w-full h-[200px] border-[2px] border-dashed border-gray-20 overflow-hidden rounded-md">
+                                <img
+                                    v-if="form.thumbnail"
+                                    :src="form.thumbnail"
+                                    onerror="this.src='/images/default.jpg'"
+                                    alt="/"
+                                    class="w-full h-[200px] rounded-md object-cover"
+                                >
+                                <a-empty v-else class="pt-10" :description="false" />
                             </div>
-                            <input
-                                id="thumbnailImage"
-                                class="!hidden"
-                                type="file"
-                                accept="image/jpeg, image/png"
-                                :disabled="isEdit"
-                                @change="previewThumbnail"
+                            <a-upload
+                                v-if="!isEdit"
+                                :show-upload-list="false"
+                                action=""
+                                class="mx-auto block text-center"
+                                :transform-file="handlerThumbnail"
                             >
-                            <div class="flex gap-x-2">
-                                <div v-if="!isEdit" class="flex items-center w-fit px-2 py-1 rounded-lg border cursor-pointer border-[#0c4ea4] hover:bg-[#0c4ea4] hover:!text-[#fff] transition duration-150 ease-out hover:ease-in border-[#d3d3d3]" @click="openSelectFile">
-                                    <p class="mb-0 px-3 text-sm  hover:text-[#fff]">
-                                        {{ fileName ? 'Thay đổi' : 'Upload' }}
-                                    </p>
+                                <div class="flex gap-x-2">
+                                    <img src="/images/upload.svg" alt="avatar">
+                                    {{ _isEmpty(blog) ? "Tải lên" : "Thay đổi" }}
                                 </div>
-                            </div>
+                            </a-upload>
                         </div>
                         <p class="text-black">
                             3. Danh mục bài viết
                         </p>
                         <div class="flex flex-col items-center gap-y-8 mb-6 w-full">
-                            <a-select
-                                v-model="form.newCategoryId"
-                                placeholder="Danh mục"
+                            <SelectRemote
+                                v-model="form.categoryId"
                                 class="w-full"
-                                @change="selectCategory"
+                                placeholder="Chọn danh mục"
+                                fetch-url="categories/fetchAll"
+                                option-label="title"
+                                option-value="_id"
+                                store="categories"
+                                store-prop="categories"
+                                :search-params="{
+                                    type: TYPE.BLOG,
+                                }"
+                                :disabled="isEdit"
                             />
-                            <!-- :options="categories.map(e => ({ label: e.title, value: e._id})) || []" -->
                         </div>
                     </div>
                 </div>
@@ -87,21 +91,26 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import _isEmpty from 'lodash/isEmpty';
     import _cloneDeep from 'lodash/cloneDeep';
+    import { mapState } from 'vuex';
+    import { convertToFormData } from '@/utils/form';
     import Editor from '@/components/shared/Editor.vue';
+    import { TYPE_OPTIONS, TYPE } from '@/constants/categories/type';
+    import SelectRemote from '@/components/filters/MonggoDBSelect.vue';
 
     const form = {
         title: '',
         shortDescription: '',
         content: '',
-        newCategoryId: '',
+        categoryId: '',
         category: null,
     };
 
     export default {
         components: {
             Editor,
+            SelectRemote,
         },
 
         props: {
@@ -117,18 +126,14 @@
 
         data() {
             return {
-                thumbnail: this.blog ? this.blog.thumbnail : null,
-                fileName: null,
-                submited: false,
+                TYPE,
+                TYPE_OPTIONS,
                 form: this.blog ? _cloneDeep(this.blog) : _cloneDeep(form),
                 rules: {
-                    title: [
-                        { required: true, message: 'Vui lòng nhập Tiêu đề', trigger: 'blur' },
-                    ],
-                    content: [
-                        { required: true, message: 'Vui lòng nhập Nội dung bài viết', trigger: 'blur' },
-                    ],
+                    title: [{ required: true, message: 'Vui lòng nhập Tiêu đề', trigger: 'blur' }],
+                    content: [{ required: true, message: 'Vui lòng nhập Nội dung bài viết', trigger: 'blur' }],
                 },
+                fileThumbnail: null,
             };
         },
 
@@ -136,31 +141,19 @@
             ...mapState('categories', ['categories']),
         },
 
+        watch: {
+            blog() {
+                this.form = this.blog ? _cloneDeep(this.blog) : _cloneDeep(form);
+            },
+        },
+
         methods: {
-            openSelectFile() {
-                document.querySelector('#thumbnailImage').click();
-            },
+            _isEmpty,
+            convertToFormData,
 
-            previewThumbnail() {
-                const imageSelect = document.querySelector('#thumbnailImage').files[0];
-                this.fileName = imageSelect.name;
-                this.thumbnail = URL.createObjectURL(imageSelect);
-            },
-
-            async handlerThumbnail() {
-                const formData = new FormData();
-                const imageSelected = document.querySelector('#thumbnailImage').files[0];
-                formData.append('image', imageSelected);
-                await this.$axios.blog('https://casota.herokuapp.com/api/uploads', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                })
-                    .then((res) => { this.form.thumbnail = res.data.data.fileAttributes[0].source; })
-                    .catch(() => { this.form.thumbnail = '/images/default.jpg'; })
-                    .finally(() => false);
-            },
-
-            selectCategory(category) {
-                this.form.newCategoryId = category;
+            handlerThumbnail(file) {
+                this.fileThumbnail = file;
+                this.form.thumbnail = URL.createObjectURL(file);
             },
 
             getContent(content) {
@@ -170,12 +163,13 @@
             async submit() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
-                        if (this.fileName) {
-                            await this.handlerThumbnail();
+                        if (this.fileThumbnail) {
+                            const { data: { fileAttributes } } = await this.$api.uploaders.uploadFiles(convertToFormData({
+                                files: this.fileThumbnail,
+                            }));
+                            this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
                         }
                         this.$emit('submit', this.form);
-                    } else {
-                        this.$message.error('Cần nhập đủ trường!');
                     }
                 });
             },

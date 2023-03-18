@@ -1,7 +1,20 @@
 <template>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <SearchFilter
+            label="Tên khách hàng"
+            placeholder="Tên khách hàng"
+        />
+        <SearchFilter
+            label="Email khách hàng"
+            placeholder="Tìm email khách hàng"
+            query="email"
+        />
+        <SearchFilter
+            label="Số điện thoại"
+            placeholder="Nhập số điện thoại"
+            query="email"
+        />
         <SelectFilter
-            class="col-span-2"
             label="Giới tính"
             placeholder="Chọn giới tính"
             query="gender"
@@ -13,10 +26,12 @@
 <script>
     import { USER_GENDER_OPTIONS } from '@/constants/user/gender';
     import SelectFilter from '@/components/filters/Select.vue';
+    import SearchFilter from '@/components/filters/Search.vue';
 
     export default {
         components: {
             SelectFilter,
+            SearchFilter,
         },
 
         data() {

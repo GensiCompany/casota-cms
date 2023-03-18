@@ -65,8 +65,7 @@
                 <template #default="record">
                     <a-switch
                         :default-checked="record.status === 'active' ? true : false"
-                        @click="updateStatus(record)"
-                        @change="onChange"
+                        @change="onChange(record)"
                     />
                 </template>
             </a-table-column>
@@ -78,7 +77,7 @@
                 :width="150"
             >
                 <template #default="createdAt">
-                    {{ createdAt | dateFormat('HH:mm dd/MM/yyyy') }}
+                    {{ createdAt | dateFormat('dd/MM/yyyy') }}
                 </template>
             </a-table-column>
             <a-table-column
@@ -143,7 +142,6 @@
         data() {
             return {
                 blogSelected: null,
-                statusWitch: null,
             };
         },
 
@@ -151,26 +149,25 @@
         },
 
         methods: {
-            async updateStatus(post) {
-                this.blogSelected = post;
-                try {
-                    this.$api.posts.update(this.blogSelected._id, { status: this.statusWitch ? 'active' : 'inactive' });
-                    this.statusWitch = null;
-                } catch (e) {
-                    this.$handleError(e);
-                }
-            },
-            onChange(feedback) {
-                this.statusWitch = feedback;
-            },
             async confirmDelete() {
                 try {
-                    await this.$api.posts.delete(this.blogSelected.slug);
+                    await this.$api.blogs.delete(this.blogSelected._id);
                     this.$message.success('Xóa bài viết thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);
-                    this.$message.error('Xóa bài viết thất bại');
+                }
+            },
+
+            async onChange(_blog) {
+                try {
+                    await this.$api.blogs.update(
+                        _blog._id,
+                        { ..._blog, status: _blog === 'active' ? 'inactive' : 'active' },
+                    );
+                    this.$message.success('Thay đổi trạng thái thành công');
+                } catch (e) {
+                    this.$handleError(e);
                 }
             },
         },

@@ -32,9 +32,9 @@
                     <a-form-model-item prop="username" label="Tên đăng nhập" class="!mb-5">
                         <a-input v-model="form.username" placeholder="Tên đăng nhập của người dùng" :disabled="!isEdit" />
                     </a-form-model-item>
-                    <a-form-model-item prop="password" label="Mật khẩu" class="!mb-5">
+                    <!-- <a-form-model-item prop="password" label="Mật khẩu" class="!mb-5">
                         <a-input v-model="form.password" placeholder="Mật khẩu" :disabled="!isEdit" />
-                    </a-form-model-item>
+                    </a-form-model-item> -->
                     <a-form-model-item prop="fullname" label="Họ và tên" class="!mb-5">
                         <a-input v-model="form.fullname" placeholder="Nhập họ và tên người dùng" :disabled="!isEdit" />
                     </a-form-model-item>
@@ -67,7 +67,7 @@
                 </p>
                 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <a-form-model-item
-                        v-if="form.address"
+                        v-if="form.address && form.address.province"
                         has-feedback
                         label="Tỉnh/Thành phố"
                         prop="address.province.id"
@@ -93,7 +93,7 @@
                         />
                     </a-form-model-item>
                     <a-form-model-item
-                        v-if="form.address"
+                        v-if="form.address && form.address.district"
                         has-feedback
                         label="Quận/Huyện"
                         prop="address.district.id"
@@ -118,7 +118,7 @@
                         />
                     </a-form-model-item>
                     <a-form-model-item
-                        v-if="form.address"
+                        v-if="form.address && form.address.ward"
                         has-feedback
                         label="Phường, xã, thị trấn"
                         prop="address.ward.id"

@@ -115,19 +115,19 @@
                 <template #default="banner">
                     <a-button
                         type="primary"
-                        class="!bg-prim-100 !border-transparent"
+                        class="!bg-prim-100 !border-transparent !leading-[10px]"
                         shape="circle"
                         @click="() => {
                             bannerSelected = banner,
                             $refs.bannerDialog.open(banner)
                         }"
                     >
-                        <i class="isax isax-pen" />
+                        <i class="isax isax-edit" />
                     </a-button>
                     <a-button
                         type="primary"
                         shape="circle"
-                        class="!bg-prim-100 !border-transparent"
+                        class="!bg-prim-100 !border-transparent !leading-[10px]"
                         @click="() => {
                             bannerSelected = banner,
                             $refs.confirmDelete.open()}"
@@ -186,14 +186,17 @@
                 this.bannerSelected = banner;
                 try {
                     this.$api.banners.update(this.bannerSelected._id, { status: this.statusWitch ? 'active' : 'inactive' });
+                    this.$message.success('Thay đổi trạng thái thành công');
                     this.statusWitch = null;
                 } catch (e) {
                     this.$handleError(e);
                 }
             },
+
             onChange(banner) {
                 this.statusWitch = banner;
             },
+
             async confirmDelete() {
                 try {
                     await this.$api.banners.delete(this.bannerSelected._id);

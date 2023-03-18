@@ -35,8 +35,12 @@
         },
 
         watch: {
-            contentProps() {
-                this.content = this.contentProps;
+            contentProps: {
+                handler() {
+                    this.content = this.contentProps;
+                },
+                deep: true,
+                immediate: true,
             },
         },
 

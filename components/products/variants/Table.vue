@@ -101,7 +101,7 @@
                             </a-menu-item>
                             <a-menu-item
                                 class="!text-danger-100"
-                                :disabled="!record.isDeleted"
+                                :disabled=" record.isDeleted"
                                 @click="() => {
                                     variantSelected = record,
                                     $refs.ConfirmDialog.open();

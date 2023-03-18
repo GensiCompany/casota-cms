@@ -68,12 +68,19 @@
                             3. Danh mục sản phẩm
                         </p>
                         <div class="flex flex-col items-center gap-y-8 mb-6 w-full">
-                            <a-select
-                                v-model="form.newCategoryId"
-                                placeholder="Danh mục"
+                            <SelectRemote
+                                v-model="form.categoryId"
                                 class="w-full"
+                                placeholder="Chọn danh mục"
+                                fetch-url="categories/fetchAll"
+                                option-label="title"
+                                option-value="_id"
+                                store="categories"
+                                store-prop="categories"
+                                :search-params="{
+                                    type: TYPE.PRODUCT,
+                                }"
                                 :disabled="isEdit"
-                                @change="selectCategory"
                             />
                         </div>
                         <div v-if="product">
@@ -98,6 +105,8 @@
     import Editor from '@/components/shared/Editor.vue';
     import { convertToFormData } from '@/utils/form';
     import { STATUS } from '@/constants/products/status';
+    import SelectRemote from '@/components/filters/MonggoDBSelect.vue';
+    import { TYPE_OPTIONS, TYPE } from '@/constants/categories/type';
 
     const form = {
         title: '',
@@ -110,6 +119,7 @@
     export default {
         components: {
             Editor,
+            SelectRemote,
         },
 
         props: {
@@ -125,12 +135,15 @@
 
         data() {
             return {
+                TYPE,
+                TYPE_OPTIONS,
                 form: this.product ? _cloneDeep(this.product) : _cloneDeep(form),
                 rules: {
                     title: [{ required: true, message: 'Vui lòng nhập tên sản phẩm', trigger: 'blur' }],
                     content: [{ required: true, message: 'Vui lòng nhập mô tả sản phẩm', trigger: 'blur' }],
                 },
                 fileThumbnail: null,
+                synchorus: false,
             };
         },
 
@@ -154,13 +167,20 @@
             _isEmpty,
             convertToFormData,
 
-            handlerThumbnail(file) {
+            async handlerThumbnail(file) {
                 this.fileThumbnail = file;
                 this.form.thumbnail = URL.createObjectURL(file);
-            },
-
-            selectCategory(category) {
-                this.form.newCategoryId = category;
+                if (this.fileThumbnail) {
+                    try {
+                        this.synchorus = true;
+                        const { data: { fileAttributes } } = await this.$api.uploaders.uploadFiles(convertToFormData({
+                            files: this.fileThumbnail,
+                        }));
+                        this.form.thumbnail = fileAttributes[0]?.source;
+                    } finally {
+                        this.synchorus = false;
+                    }
+                }
             },
 
             getContent(content) {
@@ -174,13 +194,9 @@
             async submit() {
                 this.$refs.form.validate(async (valid) => {
                     if (valid) {
-                        if (this.fileThumbnail) {
-                            const { data: { fileAttributes } } = await this.$api.uploaders.uploadFiles(convertToFormData({
-                                files: this.fileThumbnail,
-                            }));
-                            this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
+                        if (!this.synchorus) {
+                            this.$emit('submit', this.form);
                         }
-                        this.$emit('submit', this.form);
                     }
                 });
             },

@@ -13,8 +13,8 @@ export const mutations = {
 };
 
 export const actions = {
-    async fetchAll({ commit }) {
-        const { data: { categories } } = await this.$api.categories.getAll();
+    async fetchAll({ commit }, payload) {
+        const { data: { categories } } = await this.$api.categories.getAll(payload);
         commit('SET_STATE', { prop: 'categories', data: categories });
     },
 

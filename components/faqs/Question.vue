@@ -1,5 +1,5 @@
 <template>
-    <a-spin :spinning="loading">
+    <div>
         <div class="xl:max-w-[80%] w-full mx-auto">
             <div class="flex justify-between items-center bg-[#f1f1f1] py-3 px-3 rounded-t-sm">
                 <div class="flex items-center gap-3">
@@ -27,17 +27,14 @@
                             <a-menu-item @click="openDetailDialog">
                                 Chỉnh sửa
                             </a-menu-item>
-                            <a-menu-item class="!text-danger-100" @click="refs.ConfirmDialog.open()">
+                            <a-menu-item class="!text-danger-100" @click="$refs.ConfirmDialog.open()">
                                 Xóa
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
                 </div>
             </div>
-            <div
-                class="py-3 px-5 rounded-b-md border-x-[2px] border-b-[2px] border-solid border-gray-10"
-                v-html="faq.content"
-            />
+            <div class="py-3 px-5 rounded-b-md border-x-[2px] border-b-[2px] border-solid border-gray-10" v-html="faq.content" />
         </div>
         <ConfirmDialog
             ref="ConfirmDialog"
@@ -45,7 +42,7 @@
             content="Bạn chắc chắn xóa câu hỏi này chứ, lưu ý thao tác này không thể khôi phục"
             @confirm="deleteQuetion"
         />
-    </a-spin>
+    </div>
 </template>
 
 <script>

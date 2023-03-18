@@ -96,13 +96,11 @@
                     route: '/contact',
                     label: 'Thông tin liên hệ',
                     icon: 'isax isax-send-2',
-                },
-                // {
-                //     route: '/contact-infor',
-                //     label: 'Thông tin liên hệ',
-                //     icon: 'isax isax-like-dislike',
-                // }
-                ],
+                }, {
+                    route: '/feedbacks',
+                    label: 'Phản hồi khách hàng',
+                    icon: 'isax isax-message',
+                }],
                 isOpen: true,
                 openKeys: [],
                 logoutVisible: false,

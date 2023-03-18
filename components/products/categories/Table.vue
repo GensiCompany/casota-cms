@@ -63,6 +63,7 @@
                     <a-button
                         type="primary"
                         shape="circle"
+                        class="!leading-[10px]"
                         @click="() => {
                             categorySelected = category,
                             $refs.categoryDialog.open(category)
@@ -73,6 +74,7 @@
                     <a-button
                         type="primary"
                         shape="circle"
+                        class="!leading-[10px]"
                         @click="() => {
                             categorySelected = category,
                             $refs.confirmDelete.open()
@@ -128,7 +130,7 @@
         methods: {
             async confirmDelete() {
                 try {
-                    await this.$api.blogsCategories.delete(this.categorySelected._id);
+                    await this.$api.categories.delete(this.categorySelected._id);
                     this.$message.success('Xóa danh mục thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
