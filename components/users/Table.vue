@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="table-client">
         <a-table
             :data-source="users"
             :pagination="false"
-            :scroll="{ x: 1200 }"
+            :scroll="{ x: 1000 }"
             :row-key="(row) => row._id"
             :loading="loading"
         >
@@ -216,3 +216,11 @@
         },
     };
 </script>
+
+<style lang="scss">
+    .table-client {
+        .ant-table-body {
+            @apply max-h-[48vh] #{!important}
+        }
+    }
+</style>
