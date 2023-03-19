@@ -22,11 +22,17 @@
                     <a-input v-model="form.address" placeholder="Địa chỉ" />
                 </a-form-model-item>
                 <a-form-model-item label="Nhúng bản đồ" prop="iframe">
-                    <a-textarea v-model="form.iframe" :auto-size="{ minRows: 3, maxRows: 4 }" placeholder="Nhúng iframe vào đây" />
+                    <a-textarea
+                        v-model="form.map"
+                        :auto-size="{ minRows: 3, maxRows: 4 }"
+                        placeholder="Nhúng iframe vào đây"
+                        :spellcheck="false"
+                        @change="changeMap"
+                    />
                 </a-form-model-item>
             </div>
         </a-form-model>
-        <div class="h-[300px]" v-html="form.iframe" />
+        <div class="map-iframe h-[300px]" v-html="form.map === '' ? defaultMap : form.map" />
     </div>
 </template>
 
@@ -42,7 +48,7 @@
         address: '',
         phoneNumber: '',
         email: '',
-        iframe: '',
+        map: '',
     };
 
     export default {
@@ -63,14 +69,15 @@
                         required: true, validator: phoneValidator, message: 'Vui lòng nhập đúng định dạng số điện thoại', trigger: ['change', 'blur'],
                     }],
                 },
+                defaultMap: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29789.444663766186!2d105.82668445893559!3d21.045462965012675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab111d6509a3%3A0xa889b563318408b2!2zQuG7h25oIHZp4buHbiBQaOG7lWkgVHJ1bmcgxrDGoW5n!5e0!3m2!1svi!2s!4v1679195838257!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
             };
         },
 
         watch: {
             contact() {
                 this.form = this.contact ? _cloneDeep(this.contact) : _cloneDeep(defaultForm);
-                if (this.contact && !this.contact.iframe) {
-                    this.form.iframe = '';
+                if (this.form.map.split(' ')[0] !== '<iframe') {
+                    this.form.map = this.defaultMap;
                 }
             },
         },
@@ -83,6 +90,20 @@
                     }
                 });
             },
+
+            changeMap() {
+                if (this.form.map.split(' ')[0] !== '<iframe') {
+                    this.form.map = this.defaultMap;
+                }
+            },
         },
     };
 </script>
+
+<style lang="scss">
+    .map-iframe {
+        iframe {
+            @apply w-full h-[300px] #{!important};
+        }
+    }
+</style>
