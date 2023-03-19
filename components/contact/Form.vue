@@ -69,7 +69,7 @@
                         required: true, validator: phoneValidator, message: 'Vui lòng nhập đúng định dạng số điện thoại', trigger: ['change', 'blur'],
                     }],
                 },
-                defaultMap: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29789.444663766186!2d105.82668445893559!3d21.045462965012675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab111d6509a3%3A0xa889b563318408b2!2zQuG7h25oIHZp4buHbiBQaOG7lWkgVHJ1bmcgxrDGoW5n!5e0!3m2!1svi!2s!4v1679195838257!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
+                defaultMap: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29792.424525167047!2d105.83535335847166!3d21.030562611805735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aba15ec15d17%3A0x620e85c2cfe14d4c!2zTMSDbmcgQ2jhu6cgdOG7i2NoIEjhu5MgQ2jDrSBNaW5o!5e0!3m2!1svi!2s!4v1679202761644!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
             };
         },
 
