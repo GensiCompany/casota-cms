@@ -11,14 +11,8 @@
             layout="vertical"
             :colon="false"
         >
-            <a-form-model-item label="Mật khẩu cũ" prop="oldPassword">
-                <a-input-password v-model="form.oldPassword" placeholder="Nhập mật khẩu cũ" />
-            </a-form-model-item>
-            <a-form-model-item class="!mt-4" label="Mật khẩu mới" prop="newPassword">
-                <a-input-password v-model="form.newPassword" placeholder="Nhập mật khẩu mới" />
-            </a-form-model-item>
-            <a-form-model-item class="!mt-4" label="Nhập lại mật khẩu mới" prop="confirmPassword">
-                <a-input-password v-model="form.confirmPassword" placeholder="Nhập lại mật khẩu mới" />
+            <a-form-model-item label="Mật khẩu mới" prop="password">
+                <a-input-password v-model="form.password" placeholder="Nhập mật khẩu mới" />
             </a-form-model-item>
         </a-form-model>
         <div slot="footer" class="flex justify-center items-center gap-2">
@@ -38,36 +32,15 @@
 </template>
 
 <script>
-    import { passwordValidtor } from '@/utils/form';
-
     export default {
         data() {
-            const passwordConfirmValidator = async (_rule, value) => {
-                if (value !== this.form.newPassword) {
-                    // eslint-disable-next-line prefer-promise-reject-errors
-                    return Promise.reject('Nhập lại mật khẩu không khớp với mật khẩu mới');
-                }
-
-                return Promise.resolve();
-            };
-
             return {
                 visible: false,
                 loading: false,
                 room: null,
                 form: {},
                 rules: {
-                    oldPassword: [{
-                        required: true, message: 'Vui lòng nhập mật khẩu cũ', trigger: 'blur',
-                    }],
-                    newPassword: [{
-                        required: true, message: 'Vui lòng nhập mật khẩu mới', trigger: 'blur',
-                    }, {
-                        validator: passwordValidtor, trigger: 'blur',
-                    }],
-                    confirmPassword: [{
-                        validator: passwordConfirmValidator, triggler: 'blur',
-                    }, {
+                    password: [{
                         required: true, message: 'Vui lòng nhập lại mật khẩu mới', trigger: 'blur',
                     }],
                     user: null,
@@ -75,18 +48,10 @@
             };
         },
 
-        computed: {
-            authUser() {
-                return this.$auth.user;
-            },
-        },
-
         methods: {
             open(user) {
                 this.form = {
-                    oldPassword: '',
-                    newPassword: '',
-                    confirmPassword: '',
+                    password: '',
                 };
                 this.user = user;
                 this.visible = true;

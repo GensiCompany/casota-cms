@@ -100,6 +100,10 @@
                     route: '/feedbacks',
                     label: 'Phản hồi khách hàng',
                     icon: 'isax isax-message',
+                }, {
+                    route: '/ratings',
+                    label: 'Đánh giá khách hàng',
+                    icon: 'isax isax-star',
                 }],
                 isOpen: true,
                 openKeys: [],
