@@ -1,7 +1,9 @@
 <template>
     <div>
         <img class="w-[50%] h-auto mx-auto rounded-md" src="/images/update.jpg" alt="/">
-        <h4 class="mt-4 text-center text-xl">Tính năng đang nghiên cứu phát triển</h4>
+        <h4 class="mt-4 text-center text-xl">
+            Tính năng đang nghiên cứu phát triển
+        </h4>
     </div>
 </template>
 

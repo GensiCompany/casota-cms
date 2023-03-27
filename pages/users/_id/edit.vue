@@ -4,6 +4,9 @@
             <div class="flex justify-between items-center">
                 <ct-page-header show-back :text="`Khách hàng: ${user.fullname || ''}`" />
                 <div class="flex gap-5">
+                    <a-button @click="$refs.UpdatePassword.open(user)">
+                        Đổi mật khẩu
+                    </a-button>
                     <a-button
                         :loading="loading"
                         type="primary"
@@ -26,6 +29,7 @@
                 />
             </div>
         </a-spin>
+        <UpdatePassword ref="UpdatePassword" />
     </div>
 </template>
 
@@ -33,10 +37,12 @@
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
     import UsersForm from '@/components/users/Form.vue';
+    import UpdatePassword from '@/components/users/UpdatePassword.vue';
 
     export default {
         components: {
             UsersForm,
+            UpdatePassword,
         },
 
         async fetch() {
