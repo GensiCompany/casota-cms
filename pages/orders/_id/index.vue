@@ -9,7 +9,7 @@
                             Quay lại
                         </a-button>
                     </nuxt-link>
-                    <nuxt-link :to="`/orders/${order._id}/edit`">
+                    <nuxt-link v-if="order.status === STATUS.DRAFT" :to="`/orders/${order._id}/edit`">
                         <a-button
                             type="primary"
                             :loading="loading"
@@ -33,6 +33,7 @@
 <script>
     import { mapState } from 'vuex';
     import OrdersForm from '@/components/orders/Form.vue';
+    import { STATUS } from '@/constants/orders/status';
 
     export default {
         components: {
@@ -49,6 +50,7 @@
 
         data() {
             return {
+                STATUS,
                 loading: false,
             };
         },

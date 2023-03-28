@@ -103,20 +103,67 @@
                                     Xem chi tiết
                                 </nuxt-link>
                             </a-menu-item>
-                            <a-menu-item>
+                            <a-menu-item v-if="record.status === STATUS.DRAFT">
                                 <nuxt-link :to="`/orders/${record._id}/edit`">
                                     Chỉnh sửa
                                 </nuxt-link>
                             </a-menu-item>
+
                             <a-menu-item
-                                class="!text-danger-100"
-                                :disabled="record.status !== STATUS.DRAFT"
+                                v-if="record.status === STATUS.ACCEPT"
+                                class="!text-link-100"
                                 @click="() => {
-                                    categorySelected = record,
+                                    orderSelected = record,
+                                    statusSelected = STATUS.DELIVERING,
+                                    $refs.StatusDialog.open();
+                                }"
+                            >
+                                Chuyển hàng
+                            </a-menu-item>
+                            <a-menu-item
+                                v-if="record.status === STATUS.DELIVERING"
+                                class="!text-link-100"
+                                @click="() => {
+                                    orderSelected = record,
+                                    statusSelected = STATUS.SUCCESS,
+                                    $refs.StatusDialog.open();
+                                }"
+                            >
+                                Giao thành công
+                            </a-menu-item>
+
+                            <a-menu-item
+                                v-if="record.status === STATUS.PENDING"
+                                class="!text-link-100"
+                                @click="() => {
+                                    orderSelected = record,
+                                    statusSelected = STATUS.ACCEPT,
+                                    $refs.StatusDialog.open();
+                                }"
+                            >
+                                Chấp nhận
+                            </a-menu-item>
+                            <a-menu-item
+                                v-if="record.status === STATUS.PENDING"
+                                class="!text-danger-100"
+                                @click="() => {
+                                    orderSelected = record,
+                                    statusSelected = STATUS.REJECT,
+                                    $refs.StatusDialog.open();
+                                }"
+                            >
+                                Từ chối
+                            </a-menu-item>
+
+                            <a-menu-item
+                                v-if="record.status === STATUS.DRAFT || record.status === STATUS.REJECT"
+                                class="!text-danger-100"
+                                @click="() => {
+                                    orderSelected = record,
                                     $refs.ConfirmDialog.open();
                                 }"
                             >
-                                {{ record.status === STATUS.DRAFT ? "Xóa" : "Không thể xóa" }}
+                                Xóa
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
@@ -132,6 +179,14 @@
             content="Bạn chắc chắn xóa danh mục này ?"
             @confirm="confirmDelete"
         />
+
+        <ConfirmDialog
+            ref="StatusDialog"
+            title="Xác nhận chuyển trạng thái"
+            @confirm="confirmStatus"
+        >
+            <div>Bạn muốn chuyển trạng thái đơn hàng sang <span class="font-semibold">{{ STATUS_LABEL[statusSelected] }}</span> chứ ?</div>
+        </ConfirmDialog>
     </div>
 </template>
 
@@ -165,7 +220,8 @@
             return {
                 STATUS,
                 STATUS_OPTIONS,
-                categorySelected: null,
+                orderSelected: null,
+                statusSelected: null,
             };
         },
 
@@ -184,8 +240,21 @@
 
             async confirmDelete() {
                 try {
-                    await this.$api.orders.delete(this.categorySelected._id);
+                    await this.$api.orders.delete(this.orderSelected._id);
                     this.$message.success('Xóa đơn hàng thành công');
+                    this.$nuxt.refresh();
+                } catch (e) {
+                    this.$handleError(e);
+                }
+            },
+
+            async confirmStatus() {
+                try {
+                    await this.$api.orders.update(
+                        this.orderSelected._id,
+                        { ...this.orderSelected, status: this.statusSelected },
+                    );
+                    this.$message.success('Chuyển trạng thái đơn hàng thành công');
                     this.$nuxt.refresh();
                 } catch (e) {
                     this.$handleError(e);
