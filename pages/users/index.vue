@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <UsersTable :users="users.concat(users).concat(users)" :loading="loading" :pagination="pagination" />
+                <UsersTable :users="users" :loading="loading" :pagination="pagination" />
             </div>
         </div>
     </div>
