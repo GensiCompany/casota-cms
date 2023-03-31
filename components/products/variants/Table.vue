@@ -61,7 +61,7 @@
                 align="center"
             >
                 <template #default="record">
-                    <span>{{ record.option1 || '--' }}</span>
+                    <span v-if="record.option1.split('-')[0]">{{ record.option1.split('-')[0] || '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column

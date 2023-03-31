@@ -3,7 +3,7 @@
         v-model="visible"
         destroy-on-close
         :title="_isEmpty(variant) ? 'Thêm sản phẩm con' : 'Chỉnh sửa sản phẩm con'"
-        width="800px"
+        width="850px"
     >
         <a-form-model
             ref="form"
@@ -50,12 +50,15 @@
                         />
                     </a-form-model-item>
                     <div class="grid grid-cols-2 gap-5">
-                        <a-form-model-item label="Màu sắc" prop="option1">
-                            <a-input
-                                v-model="form.option1"
-                                placeholder="Nhập màu sắc"
-                            />
-                        </a-form-model-item>
+                        <div class="flex gap-5">
+                            <a-form-model-item label="Màu sắc">
+                                <a-input
+                                    v-model="colorOption.name"
+                                    placeholder="Nhập màu sắc"
+                                />
+                            </a-form-model-item>
+                            <input v-model="colorOption.value" class="my-auto" type="color">
+                        </div>
                         <a-form-model-item label="Kích cỡ" prop="option2">
                             <a-select
                                 v-model="form.option2"
@@ -118,11 +121,15 @@
                 rules: {
                     title: [{ required: true, message: 'Vui lòng nhập tiêu đề sản phẩm', trigger: 'blur' }],
                     price: [{ required: true, message: 'Vui lòng nhập giá sản phẩm', trigger: 'blur' }],
-                    option1: [{ required: true, message: 'Vui lòng nhập màu sản phẩm', trigger: 'blur' }],
+                    'colorOption.name': [{ required: true, message: 'Vui lòng nhập màu sản phẩm', trigger: 'blur' }],
                     option2: [{ required: true, message: 'Vui lòng chọn kích cỡ sản phẩm', trigger: 'blur' }],
                 },
                 variant: null,
                 thumbnailFile: null,
+                colorOption: {
+                    name: '',
+                    value: '#fffff',
+                },
             };
         },
 
@@ -130,6 +137,11 @@
             variant: {
                 handler() {
                     this.form = this.variant ? _cloneDeep(this.variant) : _cloneDeep(defaulForm);
+                    this.colorOption = {
+                        name: this.form.option1.split('-')[0] ? this.form.option1.split('-')[0] : '',
+                        value: this.form.option1.split('-')[1] ? this.form.option1.split('-')[1] : '#fffff',
+                    };
+                    console.log(this.colorOption);
                 },
                 deep: true,
                 immediate: true,
@@ -186,10 +198,10 @@
                                 this.form = { ...this.form, thumbnail: fileAttributes[0]?.source };
                             }
                             if (_isEmpty(this.variant)) {
-                                await this.create(this.form);
+                                await this.create({ ...this.form, option1: `${`${this.colorOption.name}-${this.colorOption.value}`}` });
                                 this.$message.success('Thêm mới sản phẩm thành công');
                             } else {
-                                await this.update(this.form);
+                                await this.update({ ...this.form, option1: `${`${this.colorOption.name}-${this.colorOption.value}`}` });
                                 this.$message.success('Chỉnh sửa sản phẩm thành công');
                             }
                             this.$nuxt.refresh();
