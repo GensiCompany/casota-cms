@@ -162,6 +162,7 @@
         usernameValidator,
     } from '@/utils/form';
     import _cloneDeep from 'lodash/cloneDeep';
+    import _assign from 'lodash/assign';
     import SelectRemote from '@/components/filters/SelectRemote.vue';
     import { USER_GENDER, USER_GENDER_OPTIONS } from '@/constants/user/gender';
     import { USER_STATUS, USER_STATUS_OPTIONS } from '@/constants/user/status';
@@ -217,7 +218,7 @@
                 USER_STATUS_OPTIONS,
                 USER_GENDER,
                 USER_GENDER_OPTIONS,
-                form: this.user ? _cloneDeep(this.user) : _cloneDeep(defaultForm),
+                form: this.user ? _cloneDeep(_assign({}, this.user, defaultForm)) : _cloneDeep(defaultForm),
                 fileAvatar: null,
                 rules: {
                     username: [{ required: true, validator: usernameValidator, trigger: 'blur' }],
@@ -250,7 +251,7 @@
         watch: {
             user: {
                 handler() {
-                    this.form = this.user ? _cloneDeep(this.user) : _cloneDeep(defaultForm);
+                    this.form = this.user ? _cloneDeep(_assign({}, this.user, defaultForm)) : _cloneDeep(defaultForm);
                 },
                 deep: true,
                 immediate: true,
