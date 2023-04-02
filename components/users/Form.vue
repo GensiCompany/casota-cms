@@ -218,7 +218,7 @@
                 USER_STATUS_OPTIONS,
                 USER_GENDER,
                 USER_GENDER_OPTIONS,
-                form: this.user ? _cloneDeep(_assign({}, this.user, defaultForm)) : _cloneDeep(defaultForm),
+                form: this.user ? _cloneDeep(_assign({}, defaultForm, this.user)) : _cloneDeep(defaultForm),
                 fileAvatar: null,
                 rules: {
                     username: [{ required: true, validator: usernameValidator, trigger: 'blur' }],
@@ -251,7 +251,7 @@
         watch: {
             user: {
                 handler() {
-                    this.form = this.user ? _cloneDeep(_assign({}, this.user, defaultForm)) : _cloneDeep(defaultForm);
+                    this.form = this.user ? _cloneDeep(_assign({}, defaultForm, this.user)) : _cloneDeep(defaultForm);
                 },
                 deep: true,
                 immediate: true,
@@ -260,7 +260,7 @@
             'form.address.province': {
                 handler() {
                     if (this.form.address) {
-                        this.form.address.province.name = this.provinces.find((item) => item.id === this.form.address.province.id)?.title;
+                        this.form.address.province.name = this.provinces.find((item) => +item.id === +this.form.address.province.id)?.title;
                     }
                 },
                 deep: true,
@@ -270,7 +270,7 @@
             'form.address.district': {
                 handler() {
                     if (this.form.address) {
-                        this.form.address.district.name = this.districts.find((item) => item.id === this.form.address.district.id)?.title;
+                        this.form.address.district.name = this.districts.find((item) => +item.id === +this.form.address.district.id)?.title;
                     }
                 },
                 deep: true,
@@ -280,7 +280,7 @@
             'form.address.ward': {
                 handler() {
                     if (this.form.address) {
-                        this.form.address.ward.name = this.wards.find((item) => item.id === this.form.address.ward.id)?.title;
+                        this.form.address.ward.name = this.wards.find((item) => +item.id === +this.form.address.ward.id)?.title;
                     }
                 },
                 deep: true,
@@ -301,10 +301,24 @@
                             }));
                             this.form = { ...this.form, avatar: fileAttributes[0]?.source };
                         }
+                        const address = {
+                            province: {
+                                id: this.form.address.province.id,
+                                name: this.provinces.find((item) => +item.id === +this.form.address.province.id)?.title,
+                            },
+                            district: {
+                                id: this.form.address.district.id,
+                                name: this.districts.find((item) => +item.id === +this.form.address.district.id)?.title,
+                            },
+                            ward: {
+                                id: this.form.address.ward.id,
+                                name: this.wards.find((item) => +item.id === +this.form.address.ward.id)?.title,
+                            },
+                        };
                         this.$emit('submit', {
                             ...this.form,
                             address: {
-                                ...this.form.address,
+                                ...address,
                                 addressDetail: this.form.address.addressDetail,
                             },
                         });
