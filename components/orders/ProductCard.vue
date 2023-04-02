@@ -8,7 +8,7 @@
                 <div class="flex justify-between ">
                     <div class="flex-[1.5] w-full sm:w-auto mb-4 md:mb-0">
                         <h3 class="text-lg font-semibold">
-                            {{ `${ product.variant.title + ' - ' + product.variant.option1 }` || '' }}
+                            {{ `${ product.variant.title + ' - ' + product.variant.option1.split('-')[0] }` || '' }}
                         </h3>
                         <div class="mt-3 flex justify-between w-full sm:hidden relative">
                             <div class="flex items-center border-2 border-[#22c55e] rounded-lg py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full">
