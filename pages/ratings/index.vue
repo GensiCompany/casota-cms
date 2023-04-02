@@ -16,7 +16,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import FeedbackTable from '@/components/feedbacks/Table.vue';
+    import FeedbackTable from '@/components/ratings/Table.vue';
 
     export default {
         components: {

@@ -21,7 +21,7 @@
                 :width="300"
             >
                 <template #default="record">
-                    <span class="line-clamp-3">{{ record.email }}</span>
+                    <span class="line-clamp-3">{{ record.email || '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
@@ -31,7 +31,7 @@
                 data-index="content"
             >
                 <template #default="content">
-                    <span class="line-clamp-3">{{ content }}</span>
+                    <span class="line-clamp-3">{{ content || '--' }}</span>
                 </template>
             </a-table-column>
             <a-table-column
@@ -40,7 +40,11 @@
                 :width="150"
                 data-index="position"
                 align="center"
-            />
+            >
+                <template #default="position">
+                    <span class="line-clamp-3">{{ position || '--' }}</span>
+                </template>
+            </a-table-column>
             <a-table-column
                 key="status"
                 title="Hiển thị"
