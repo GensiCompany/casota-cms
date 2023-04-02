@@ -69,7 +69,7 @@
                 <div :class="`col-span-12 xl:col-span-6`">
                     <div class="bg-white p-3 mb-3 rounded-md">
                         <p> 2. Sản phẩm trong đơn hàng </p>
-                        <a-form-model-item prop="orderItems" label="Sản phẩm trong giỏ hàng">
+                        <a-form-model-item v-if="!isEdit" prop="orderItems" label="Sản phẩm trong giỏ hàng">
                             <a-select
                                 v-model="stateSelectVariant"
                                 :disabled="isEdit"
