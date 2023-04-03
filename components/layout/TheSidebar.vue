@@ -104,6 +104,10 @@
                     route: '/ratings',
                     label: 'Đánh giá khách hàng',
                     icon: 'isax isax-star',
+                }, {
+                    route: '/medias',
+                    label: 'Danh sách Instagram',
+                    icon: 'isax isax-instagram',
                 }],
                 isOpen: true,
                 openKeys: [],
