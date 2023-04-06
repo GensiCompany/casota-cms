@@ -108,6 +108,10 @@
                     route: '/medias',
                     label: 'Danh sách Instagram',
                     icon: 'isax isax-instagram',
+                }, {
+                    route: '/policies',
+                    label: 'Danh sách Chính sách',
+                    icon: 'isax isax-folder',
                 }],
                 isOpen: true,
                 openKeys: [],

@@ -2,35 +2,25 @@
     <div>
         <div class="card">
             <div class="flex justify-between items-center">
-                <ct-page-header text="Hình ảnh Instagram" />
+                <ct-page-header text="Quản lý ảnh Instagram" />
                 <div class="flex gap-5">
                     <a-button
-                        v-if="isEdit"
                         type="primary"
                         class="!bg-prim-100 !border-prim-100"
-                        @click="isEdit = !isEdit"
+                        @click="$refs.MediasDialog.open()"
                     >
-                        Chỉnh sửa
-                    </a-button>
-                    <a-button
-                        v-if="!isEdit"
-                        @click="cancelUpdate"
-                    >
-                        Hủy
-                    </a-button>
-                    <a-button
-                        v-if="!isEdit"
-                        type="primary"
-                        class="!bg-prim-100 !border-prim-100"
-                    >
-                        Cập nhật
+                        <i class="fas fa-plus mr-2" />
+                        Thêm mới
                     </a-button>
                 </div>
             </div>
         </div>
-
-        <div class="mt-16 grid grid-cols-1 gap-5">
-            <MediasForm :is-edit="isEdit" :data="medias" />
+        <div class="card mt-4">
+            <MediasTable
+                :medias="medias"
+                :loading="loading"
+            />
+            <MediasDialog ref="MediasDialog" />
         </div>
     </div>
 </template>
@@ -38,11 +28,13 @@
 <script>
     import { mapState } from 'vuex';
     import { mapDataFromOptions } from '@/utils/data';
-    import MediasForm from '@/components/medias/Form.vue';
+    import MediasTable from '@/components/medias/Table.vue';
+    import MediasDialog from '@/components/medias/Dialog.vue';
 
     export default {
         components: {
-            MediasForm,
+            MediasTable,
+            MediasDialog,
         },
 
         async fetch() {
@@ -51,7 +43,6 @@
         data() {
             return {
                 loading: false,
-                isEdit: true,
             };
         },
 
@@ -64,7 +55,7 @@
 
         mounted() {
             this.$store.commit('breadcrumbs/SET_BREADCRUMBS', [{
-                label: 'Danh sách Instagram',
+                label: 'Danh sách ảnh Instagram',
                 link: '/medias',
             }]);
         },
@@ -75,24 +66,18 @@
             async fetchData() {
                 try {
                     this.loading = true;
-                    // await this.$store.dispatch('medias/fetchAll');
+                    await this.$store.dispatch('medias/fetchAll');
                 } catch (error) {
                     this.$handleError(error);
                 } finally {
                     this.loading = false;
                 }
             },
-
-            async cancelUpdate() {
-                this.isEdit = !this.isEdit;
-                await this.$nuxt.refresh();
-                this.$forceUpdate();
-            },
         },
 
         head() {
             return {
-                title: 'Danh sách Instagram',
+                title: 'Danh sách ảnh Instagram',
             };
         },
     };

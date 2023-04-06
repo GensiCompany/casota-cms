@@ -13,7 +13,7 @@ export const mutations = {
 
 export const actions = {
     async fetchAll({ commit }) {
-        // const { data: { medias, pagination } } = await this.$api.medias.getAll();
-        commit('SET_STATE', { prop: 'medias', data: [] });
+        const { data: { medias } } = await this.$api.medias.getAll();
+        commit('SET_STATE', { prop: 'medias', data: medias });
     },
 };

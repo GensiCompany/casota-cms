@@ -10,6 +10,8 @@ import ProductVariants from '@/api/products/variants';
 import Settings from '@/api/settings';
 import Orders from '@/api/orders';
 import Feedbacks from '@/api/feedbacks';
+import Medias from '@/api/medias';
+import Policies from '@/api/policies';
 
 export default (context, inject) => {
     // Initialize API factories
@@ -26,6 +28,8 @@ export default (context, inject) => {
         settings: Settings(context.$axios),
         orders: Orders(context.$axios),
         feedbacks: Feedbacks(context.$axios),
+        medias: Medias(context.$axios),
+        policies: Policies(context.$axios),
     };
 
     // Inject $api
