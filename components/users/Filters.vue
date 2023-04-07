@@ -3,7 +3,7 @@
         <SearchFilter
             label="Tên khách hàng"
             placeholder="Tên khách hàng"
-            query="fullName"
+            query="fullname"
         />
         <SearchFilter
             label="Email khách hàng"
