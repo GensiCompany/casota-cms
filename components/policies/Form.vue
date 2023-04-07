@@ -25,12 +25,12 @@
                         <a-form-model-item
                             prop="page"
                             class="!w-full"
-                            label="Sản phẩm trong giỏ hàng"
+                            label="Chọn trang"
                         >
                             <a-select
                                 v-model="form.page"
                                 :disabled="isEdit"
-                                placeholder="Tìm kiếm sản phẩm"
+                                placeholder="Vui lòng chọn trang"
                             >
                                 <a-select-option v-for="page in PAGE_OPTIONS_HANDLE" :key="page.value" :value="page.value">
                                     {{ page.label }}
