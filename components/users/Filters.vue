@@ -3,7 +3,7 @@
         <SearchFilter
             label="Tên khách hàng"
             placeholder="Tên khách hàng"
-            query="freeWord"
+            query="fullName"
         />
         <SearchFilter
             label="Email khách hàng"
