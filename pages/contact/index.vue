@@ -35,7 +35,6 @@
         data() {
             return {
                 loading: false,
-                contacts: null,
             };
         },
 
@@ -72,6 +71,7 @@
                     this.loading = true;
                     await this.$store.dispatch('settings/update', form);
                     this.$nuxt.refresh();
+                    this.$forceUpdate();
                 } catch (error) {
                     this.$handleError(error);
                 } finally {

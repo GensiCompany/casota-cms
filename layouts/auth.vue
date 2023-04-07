@@ -9,11 +9,11 @@
                 <div />
                 <div class="w-full">
                     <div class="flex items-center justify-center w-full mb-10">
-                        <img src="/images/logo.png">
+                        <!-- <img src="/images/logo.png"> -->
                     </div>
                     <div class="mb-6 text-center">
                         <div class="text-prim-100 text-xl mb-2">
-                            Chào mừng quay trở lại !
+                            CASOTA - Chào mừng quay trở lại !
                         </div>
                         <div>Đăng nhập để tiếp tục sử dụng dịch vụ</div>
                     </div>

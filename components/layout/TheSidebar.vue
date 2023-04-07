@@ -2,11 +2,8 @@
 <template>
     <div class="bg-white a-the-sidebar-vertical max-h-screen h-full flex flex-col drop-shadow-md" :class="[collapsed ? 'w-auto' : '!w-[260px]']">
         <div class="h-[65px] flex justify-center items-center" :class="[collapsed ? 'px-4' : 'px-6']">
-            <!-- <nuxt-link class="flex justify-center items-center mt-1" to="/">
-                <img src="/images/logo-white.svg" width="50">
-            </nuxt-link> -->
             <div v-show="!collapsed" class="text-white font-semibold text-3xl pt-5">
-                <img class="mx-auto" src="/images/logo.png" alt="/logo">
+                <img class="mx-auto" :src="setting.logo || ''" alt="/logo">
             </div>
         </div>
         <a-menu
@@ -40,8 +37,13 @@
 </template>
 
 <script>
-
     export default {
+        props: {
+            setting: {
+                type: Object,
+                default: () => {},
+            },
+        },
         data() {
             return {
                 sidebar: [{

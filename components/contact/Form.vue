@@ -7,7 +7,29 @@
             layout="vertical"
         >
             <div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2 mb-2">
+                <div class="max-w-[300px] mr-auto">
+                    <div class="flex flex-col items-center w-[300px] h-[150px] border-[2px] border-dashed border-gray-20 overflow-hidden rounded-md mx-auto">
+                        <img
+                            v-if="form.logo"
+                            :src="form.logo"
+                            onerror="this.src='/images/default.jpg'"
+                            alt=""
+                            class="w-[300px] h-[150px] rounded-md mx-auto object-contain p-3"
+                        >
+                        <a-empty v-else class="pt-10" :description="false" />
+                    </div>
+                    <a-upload
+                        :show-upload-list="false"
+                        action=""
+                        class="mx-auto block text-center"
+                        :transform-file="handlerThumbnail"
+                    >
+                        <div class="flex gap-x-2 mt-4">
+                            <img src="/images/upload.svg" alt="avatar"> Tải lên
+                        </div>
+                    </a-upload>
+                </div>
+                <div class="col-span-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-2 mb-2 mt-5">
                     <a-form-model-item class="md:col-span-2" label="Tên công ty" prop="companyName">
                         <a-input v-model="form.companyName" placeholder="Tên công ty" />
                     </a-form-model-item>
@@ -41,6 +63,7 @@
     import {
         validEmail,
         phoneValidator,
+        convertToFormData,
     } from '@/utils/form';
 
     const defaultForm = {
@@ -49,6 +72,7 @@
         phoneNumber: '',
         email: '',
         map: '',
+        logo: '',
     };
 
     export default {
@@ -69,6 +93,7 @@
                         required: true, validator: phoneValidator, message: 'Vui lòng nhập đúng định dạng số điện thoại', trigger: ['change', 'blur'],
                     }],
                 },
+                thumbnailFile: null,
                 defaultMap: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d29792.424525167047!2d105.83535335847166!3d21.030562611805735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aba15ec15d17%3A0x620e85c2cfe14d4c!2zTMSDbmcgQ2jhu6cgdOG7i2NoIEjhu5MgQ2jDrSBNaW5o!5e0!3m2!1svi!2s!4v1679202761644!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>',
             };
         },
@@ -83,12 +108,23 @@
         },
 
         methods: {
-            submit() {
-                this.$refs.form.validate((valid) => {
+            async submit() {
+                this.$refs.form.validate(async (valid) => {
                     if (valid) {
-                        this.$emit('submit', this.form);
+                        if (this.thumbnailFile) {
+                            const { data: { fileAttributes } } = await this.$api.uploaders.uploadFiles(convertToFormData({
+                                files: this.thumbnailFile,
+                            }));
+                            this.form = { ...this.form, logo: fileAttributes[0]?.source };
+                        }
+                        this.$emit('submit', { ...this.form });
                     }
                 });
+            },
+
+            handlerThumbnail(file) {
+                this.thumbnailFile = file;
+                this.form.logo = URL.createObjectURL(file);
             },
 
             changeMap() {

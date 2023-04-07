@@ -9,7 +9,7 @@
                 @change="(total) => changePerPage(total)"
             >
                 <a-select-option v-for="total in PAGINATION_CONFIG.PER_PAGE_OPTIONS" :key="total" :value="total">
-                    {{ total }}/page
+                    {{ total }}/ trang
                 </a-select-option>
             </a-select>
         </div>

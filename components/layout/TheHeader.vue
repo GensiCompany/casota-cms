@@ -89,9 +89,9 @@
                 this.sidebarVisible = !this.sidebarVisible;
             },
 
-            logout() {
+            async logout() {
                 // trigger logout and remove data in local storage
-                // await this.$auth.logout();
+                await this.$auth.logout();
                 // localStorage.removeItem('auth');
                 this.$router.push('/login');
             },
