@@ -97,6 +97,10 @@
                 this.visible = false;
             },
 
+            empty() {
+                this.form = _cloneDeep(defaultForm);
+            },
+
             handlerThumbnail(file) {
                 this.thumbnailFile = file;
                 this.form.source = URL.createObjectURL(file);
@@ -121,6 +125,7 @@
                                 this.$message.success('Chỉnh sửa ảnh thành công');
                             }
                             this.$nuxt.refresh();
+                            this.empty();
                             this.close();
                         } catch (error) {
                             this.$handleError(error);
