@@ -100,11 +100,13 @@
     import SelectRemote from '@/components/filters/MonggoDBSelect.vue';
 
     const form = {
+        categoryId: '',
         title: '',
         shortDescription: '',
         content: '',
-        categoryId: '',
-        category: null,
+        thumbnail: '',
+        slug: '',
+        category: {},
     };
 
     export default {
